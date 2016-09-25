@@ -1,3 +1,2 @@
-﻿# FlexNode
-
+﻿http://patterns.astafyev.net/
 
