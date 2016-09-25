@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        var id = flex.unique();
+        _patterns.debug();
+        _patterns.get({
+            url     : '/patterns/popup/pattern.html',
+            node    : document.body,
+            hooks   : {
+                id      : id,
+                title   : 'Test dialog window',
+                content : _patterns.get({
+                    url     : '/patterns/login/pattern.html',
+                    hooks   : {
+                        login   : _patterns.get({
+                            url     : '/patterns/controls/textinput/pattern.html',
+                            hooks   : {
+                                type: 'text',
+                            }
+                        }),
+                        password: _patterns.get({
+                            url     : '/patterns/controls/textinput/pattern.html',
+                            hooks   : {
+                                type: 'password',
+                            }
+                        }),
+                        controls: _patterns.get({
+                            url     : '/patterns/buttons/flat/pattern.html',
+                            hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+                        }),
+                    },
+                    resources: {
+                        field   : '1one',
+                        field2  : '1two'
+                    },
+                })
+            },
+            onReady: function (results) {
+                var instance    = this
+                    model       = results.model;
+                //Attach event to buttons
+                model[0]._content_[0]._controls_[0].$button.on('click', function () {
+                    alert('You cannot login. It\'s just test. Login is "' + model[0]._content_[0]._login_[0].value + '", and password is "' + model[0]._content_[0]._password_[0].value + '"');
+                });
+                model[0]._content_[0]._controls_[1].$button.on('click', function () {
+                    alert('Do not close me, please.');
+                });
+                model[0]._content_[0]._controls_.$button.on('click', function () {
+                    alert('This is common handle for both buttons');
+                });
+            }
+        }).render();
+    </script>
+</body>
+</html>

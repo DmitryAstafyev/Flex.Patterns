@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Settings, cache, preload</h1>
+            <h2>Settings</h2>
+            <p>All your templates will be cached (within localStorage) include all resource like CSS and JS files. To prevent such behavior, you can turn on debug mode (all resource will be taken from server).</p>
+            <code>_patterns.debug();</code>
+            <p>Or you can change settings of flex.patterns.</p>
+            <code>_patterns.setup({
+    USE_STORAGE_CSS : false,
+    USE_STORAGE_JS  : false,
+    USE_STORAGE_HTML: false
+});</code>
+            <p>Here is a full list of available settings.</p>
+            <table>
+                <tr>
+                    <td>Setting</td>
+                    <td>Default</td>
+                    <td>Description</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">USE_STORAGE_CSS</span></td>
+                    <td><span class="code-inline">true</span></td>
+                    <td>Cache or not CSS files</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">USE_STORAGE_JS</span></td>
+                    <td><span class="code-inline">true</span></td>
+                    <td>Cache or not JS files</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">USE_STORAGE_HTML</span></td>
+                    <td><span class="code-inline">true</span></td>
+                    <td>Cache or not HTML files</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">USE_LOCALSTORAGE</span></td>
+                    <td><span class="code-inline">true</span></td>
+                    <td>All cache will be saved into localStorage (true) or not (false). This setting can be used as global switcher of caching. In false – will turn off all kinds of caching.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">CACHE_PATTERNS</span></td>
+                    <td><span class="code-inline">false</span></td>
+                    <td>Cache or not rendered patterns. It can be useful if you have on page same patterns with static content. In this case result of rendering will be saved into cache and on next loading of page, such patterns will not render again, but fragment of HTML will be inserted into page.  </td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">PATTERN_NODE</span></td>
+                    <td><span class="code-inline">PATTERN</span></td>
+                    <td>Name of tag, which is used to define template in HTML of page.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">PATTERN_SRC</span></td>
+                    <td><span class="code-inline">data-pattern</span></td>
+                    <td>Name of attribute, where URL of pattern will be defined (used for layout-way render).</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">HOOK_PREFIX</span></td>
+                    <td><span class="code-inline">h_</span></td>
+                    <td>Prefix to name of node to mark this node as hook. Such way can be used instead using mapping via attribute data-hooks.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">HOOKS_SET</span></td>
+                    <td><span class="code-inline">data-hooks</span></td>
+                    <td>Name of attribute, where should be defined list all hooks inside pattern. Used in tag LINK.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">onLayoutBuildFinish</span></td>
+                    <td><span class="code-inline">null</span></td>
+                    <td>This function will be called after all patterns in layout will be rendered.</td>
+                </tr>
+            </table>
+            <h2>Cache</h2>
+            <p>To understand how flex.patterns cached results take a look on next scheme.</p>
+            <div class="scheme">
+                <img src="schemes/cache.png" />
+            </div>
+            <p>Cache has two levels:</p>
+            <ul>
+                <li>Caching of sources (HTML-files, JS-file, CSS-files)</li>
+                <li>Caching of results (your ready fragment of HTML with applied hooks, conditions and etc.)</li>
+            </ul>
+            <p>Caching of results can be recommended in case if you have on page many patterns with static content (static hooks, which doesn’t change after page will be reload). This feature turned off as default. If you need it, you should switch it on manually:</p>
+            <code>_patterns.setup({
+    CACHE_PATTERNS: true,
+});</code>
+            <p>Caching of results doesn’t depend on caching of sources. It means that caching of sources can be switched off, but caching of results – switched on. </p>
+            <h2>Preloading </h2>
+            <p>In some cases, developer need preload templates before render. In this case time for request will be used during preload procedure, but render will be done quickly. </p>
+            <code>_patterns.preload(
+    //List of template
+    [
+        '/patterns/popup/pattern.html',
+        '/patterns/login/pattern.html',
+        '/patterns/controls/textinput/pattern.html',
+        '/patterns/buttons/flat/pattern.html'
+    ],
+    //Success handle
+    function(){
+
+    },
+    //Fail handle
+    function(){
+
+    }
+);
+</code>
+            <!--
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

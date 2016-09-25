@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+</head>
+<body>
+    <pattern data-pattern="/patterns/popup/pattern.html" style="display:none;">
+        <h_id>0</h_id>
+        <h_title>Test dialog window</h_title>
+        <h_content data-pattern="/patterns/login/pattern.html">
+            <h_login data-pattern="/patterns/controls/textinput_con/pattern.html">
+                <h_type>text</h_type>
+            </h_login>
+            <h_password data-pattern="/patterns/controls/textinput_con/pattern.html">
+                <h_type>password</h_type>
+            </h_password>
+            <h_controls data-pattern="/patterns/buttons/flat/pattern.html">
+                <h_id>login_button</h_id><h_title>login</h_title>
+                <h_id>cancel_button</h_id><h_title>cancel</h_title>
+            </h_controls>
+        </h_content>
+    </pattern>
+</body>
+</html>

@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Ex-Edition: Dialogs / windows UI</h1>
+            <p>As you have noticed, you can download not only patterns.js but also expattern.js. This version has several features to organize UI of your application.</p>
+            <p>Flex.patterns has inbuilt controllers for:</p>
+            <ul>
+                <li>Drag windows (nodes);</li>
+                <li>Change size of windows;</li>
+                <li>Maximize / restore size of windows;</li>
+                <li>Control focus of window.</li>
+            </ul>
+            <p>Let’s see again on template of our popup.</p>
+            <code>&lt;div data-style="Popup" data-flex-ui-window-move-container="{{id}}" data-flex-ui-window-resize-position-parent="{{id}}" data-flex-ui-window-focus="{{id}}"&gt;
+        &lt;div data-style="Popup.Container" data-flex-ui-window-resize-container="{{id}}" data-flex-ui-window-maximize="{{id}}"&gt;
+            &lt;div data-style="Popup.Title" data-flex-ui-window-move-hook="{{id}}"&gt;
+                &lt;p data-style="Popup.Title"&gt;{{title}}&lt;/p&gt;
+                &lt;div data-style="Popup.Title.Switcher" data-state="max" data-flex-window-maximize-hook="{{id}}"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div data-style="Popup.Content"&gt;{{content}}&lt;/div&gt;
+            &lt;div data-style="Popup.Bottom"&gt;
+                &lt;p data-style="Popup.Bottom" id="test_bottom_id"&gt;{{bottom}}{{::bottom}}&lt;/p&gt;
+                &lt;div data-style="Window.Resize.Coner"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;</code>
+            <p>You see there several not-standard attributes. Within such attributes you can setup necessary UI.</p>
+            <table>
+                <tr>
+                    <td>Attribute</td>
+                    <td>Description</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-ui-window-move-container</span></td>
+                    <td>Node, which will be dragging </td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-ui-window-move-hook</span></td>
+                    <td>Node, which is used as hook for dragging. By click on this node user can drag window</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-ui-window-resize-container</span></td>
+                    <td>Node, which will be resizing</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-ui-window-resize-position-parent</span></td>
+                    <td>Node, which is needed for correction of position of resizing node. In most cases this attribute can be postponed, but if you are using quite hard nesting, it can be useful to define normal behavior during resize.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-ui-window-focus</span></td>
+                    <td>Node, which should be placed ahead all other nodes if it’s focused. By this attribute, we are defining node, whose property <span class="code-inline">z-index</span> will be changed</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-ui-window-maximize</span></td>
+                    <td>Node, which will be maximized / restored</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">data-flex-window-maximize-hook</span></td>
+                    <td>Node, which is used as button to maximize / restore window</td>
+                </tr>
+            </table>
+            <p>During rendering of template these UIs will be applied automatically. But you can do it and manually  by calling init-functions.</p>
+            <code>//Focus controller
+flex.libraries.ui.window.focus.     init();
+//Dragging controller
+flex.libraries.ui.window.move.      init();
+//Maximize / restore controller
+flex.libraries.ui.window.maximize.  init();
+//Resize controller
+flex.libraries.ui.window.resize.    init();
+</code>
+            <!--
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

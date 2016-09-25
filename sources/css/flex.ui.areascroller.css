@@ -1,0 +1,98 @@
+﻿div[data-flex-ui-areascroller="Container"],
+div[data-flex-ui-areascroller="Content"]{
+    display :block;
+    position:absolute;
+    width   :100%;
+    height  :100%;
+    overflow:hidden;
+}
+/*=======================================================================================*/
+div[data-flex-ui-areascroller="Item"]{
+    display :block;
+    position:absolute;
+    width   :100%;
+    height  :100%;
+    overflow:hidden;
+}
+/*=======================================================================================*/
+div[data-flex-ui-areascroller="border-top-container"],
+div[data-flex-ui-areascroller="border-bottom-container"],
+div[data-flex-ui-areascroller="border-left-container"],
+div[data-flex-ui-areascroller="border-right-container"]{
+    display     :block;
+    position    :absolute;
+    overflow    :hidden;
+}
+div[data-flex-ui-areascroller="border-top-container"],
+div[data-flex-ui-areascroller="border-bottom-container"]{
+    width       :100%;
+    height      :1rem;
+    left        :0;
+}
+div[data-flex-ui-areascroller="border-left-container"],
+div[data-flex-ui-areascroller="border-right-container"]{
+    width   :1rem;
+    height  :100%;
+    top     : 0;
+}
+div[data-flex-ui-areascroller="border-top-container"]{
+    top:0;
+}
+div[data-flex-ui-areascroller="border-bottom-container"]{
+    bottom:0;
+}
+div[data-flex-ui-areascroller="border-left-container"]{
+    left:0;
+}
+div[data-flex-ui-areascroller="border-right-container"]{
+    right:0;
+}
+/*=======================================================================================*/
+div[data-flex-ui-areascroller="border-top"],
+div[data-flex-ui-areascroller="border-bottom"],
+div[data-flex-ui-areascroller="border-left"],
+div[data-flex-ui-areascroller="border-right"]{
+    display     :block;
+    position    :absolute;
+    background  : -moz-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 99%); /* FF3.6+ */
+    background  : -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.65)), color-stop(50%,rgba(0,0,0,0)), color-stop(99%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background  : -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0) 99%); /* Chrome10+,Safari5.1+ */
+    background  : -o-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0) 99%); /* Opera 12+ */
+    background  : -ms-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0) 99%); /* IE10+ */
+    background  : radial-gradient(ellipse at center,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0) 99%); /* W3C */
+    filter      : progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+div[data-flex-ui-areascroller="border-top"],
+div[data-flex-ui-areascroller="border-bottom"]{
+    width       :100%;
+    height      :2rem;
+    left        :0;
+}
+div[data-flex-ui-areascroller="border-left"],
+div[data-flex-ui-areascroller="border-right"]{
+    width   :2rem;
+    height  :100%;
+    top     : 0;
+}
+div[data-flex-ui-areascroller="border-top"]{
+    top:-2rem;
+}
+div[data-flex-ui-areascroller="border-bottom"]{
+    bottom:-2rem;
+}
+div[data-flex-ui-areascroller="border-left"]{
+    left:-2rem;
+}
+div[data-flex-ui-areascroller="border-right"]{
+    right:-2rem;
+}
+/*=======================================================================================*/
+.data-flex-ui-areascroller-animation {
+    -moz-transition     : left 200ms ease-in-out, top 200ms ease-in-out;
+    -o-transition       : left 200ms ease-in-out, top 200ms ease-in-out;
+    -webkit-transition  : left 200ms ease-in-out, top 200ms ease-in-out;
+    transition          : left 200ms ease-in-out, top 200ms ease-in-out;
+}
+/*=======================================================================================*/
+/*=======================================================================================*/
+/*=======================================================================================*/

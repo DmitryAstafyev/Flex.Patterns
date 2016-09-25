@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS : true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>What is it?</h1>
+            <p>Flex-patterns is a front-end library (which can be extended to framework), which allows to use simple HTML files as templates, create modules, like requireJS does, create plug-ins as JQ. Flex-patterns doesn’t use any special syntax and any special ways for developing. Everything what you need: know HTML, CSS and a little bit JavaScript.</p>
+            <h2>Most important features</h2>
+            <ul>
+                <li><b>Cache controller.</b> All templates and modules are cached automatically. It means, during each next loading of page, flex-patterns will try find cached version of templates (and modules) and apply it instead loading it from server.</li>
+                <li><b>Easy.</b> Using flex-patterns is really easy. You don’t have to study any special syntax and some new logic. You just create a template as a standard HTML file. Also it gives you easy way to debug your template, because you can open it as separate HTML-file.</li>
+                <li><b>Scalable.</b> You can easy add your own solutions, your own functionality into flex-patterns. It gives you many possibilities to develop large and stable solutions. Besides you can easy refuse from JQuery (if you don’t use JQ-style).</li>
+                <li><b>Repeated use.</b> You can develop your own collection of templates. It can be controls, some element or heavy items with hard logic. In any case, each template has own scope and can be usage anywhere.</li>
+                <li><b>Modularity system.</b> You can create modules, like RequireJS does.</li>
+            </ul>
+            <h2>How it works?</h2>
+            <ul>
+                <li><b>Creating of template.</b> You create a template as simple HTML file and mark places for content. You can create JS-controller to add some functionality of your template. You define some styles for your template and attach it as CSS file.</li>
+                <li><b>Attaching</b>. You can attach your template to the page via HTML or within JavaScript. After you will attach a template, flex-patterns loads HTML, CSS and JS of template and apply it to the page.</li>
+                <li><b>Caching.</b> Flex-patterns will automatically cache your template and sources (CSS and JS) to make possible load it from cache (instead requests to server) during next loading of page.</li>
+                <li><b>Always actual.</b> Flex-patterns automatically creates hashes for your templates and resources. If some file has to be updated (for example, it was changed), flex-pattern will do it automatically.</li>
+            </ul>
+        </div>
+    </layout>
+</body>
+</html>

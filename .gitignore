@@ -3,3 +3,8 @@
 ################################################################################
 
 /node_modules
+/obj/Debug
+/typings
+/server.js
+/FlexNode.njsproj
+/.ntvs_analysis.dat

@@ -1,0 +1,506 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Model, events, DOM</h1>
+            <h2>Model</h2>
+            <p>Never mind, do you use callbacks or controller as result you always will get reference to model of your pattern - <span class="code-inline">results.model</span>.</p>
+            <tabs>
+                <buttons>
+                    <button>Using callback</button>
+                    <button>Using controller</button>
+                </buttons>
+                <tabs>
+                    <tab><code>_patterns.get({
+    url     : 'some_url_to_pattern',
+    onReady : function (results) {
+        var instance    = this,             //or instance = results.instance
+            listener    = results.listener,
+            model       = results.model,
+            exchange    = results.exchange;
+    },
+    onFail  : function () {
+    },
+}).render();</code></tab>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    //Pay your attantion, here is same names, like callbacks have
+    onReady     : function (results) { },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+    myMethod_0  : function () { },
+    myMethod_1  : function () { },
+    myMethod_N  : function () { },
+};
+
+_patterns.get({
+    url         : 'some_url_to_pattern',
+    controller  : Controller
+}).render();</code></tab>
+                </tabs>
+            </tabs>
+            <p>Model – is a same thing as hook (and default value of model is defining as hook), but you can get access to model-property in any time without updating pattern. For example, to change value of hook you should use method <span class="code-inline">instance.update</span> (<a class="link" href="../page_controller.html" target="_blank"><span class="fa fa-chain"></span> read more</a>).</p>
+            <p>To define model you should use next syntax in your pattern (HMTL file): <span class="code-inline">{{ ::name }}</span>. You can define model for:</p>
+            <ul>
+                <li>value of some node (innerHTML);</li>
+                <li>or for attribute of node.</li>
+            </ul>
+            <p>Let’s see, what is model with an example (<a class="link" href="../examples/table.shake.html" target="_blank"><span class="fa fa-chain"></span> life</a>).</p>
+            <tabs>
+                <buttons>
+                    <button>Template of table container</button>
+                    <button>Template of row</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table data-type="Demo.Table"&gt;
+        &lt;tr style="color:{{ ::color }};background:{{ ::background }};"&gt;
+            &lt;th&gt;{{ titles.column_0 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_1 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_2 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_3 }}&lt;/th&gt;
+        &lt;/tr&gt;
+        {{ rows }}
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+    &lt;script type="text/javascript" src="conditions.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;tr&gt;
+        &lt;td style="background:{{ ::background_0 }};color:{{ ::color_0 }}" data-type="{{ ::just_an_example }}"&gt;{{ ::column_0 }}&lt;/td&gt;
+        &lt;td style="background:{{ ::background_1 }};color:{{ ::color_1 }}"&gt;{{ ::column_1 }}&lt;/td&gt;
+        &lt;td style="background:{{ ::background_2 }};color:{{ ::color_2 }}"&gt;{{ ::column_2 }}&lt;/td&gt;
+        &lt;td style="background:{{ ::background_3 }};color:{{ ::color_3 }}"&gt;{{ ::column_3 }}&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>As you can see, we’ve defined several references to model: <span class="code-inline">column_0-3</span>, <span class="code-inline">background_0-3</span>, <span class="code-inline">color_0-3</span> and <span class="code-inline">just_an_example</span> (just to show, where can be defined model).</p>
+            <p>Now we can get access to these properties via model.</p>
+            <code>var data_source = [];
+for (var i = 0; i < 20; i += 1) {
+    data_source.push({
+        column_0: (Math.random() * 1000).toFixed(4),
+        column_1: (Math.random() * 1000).toFixed(4),
+        column_2: (Math.random() * 1000).toFixed(4),
+        column_3: (Math.random() * 1000).toFixed(4),
+    });
+}
+_patterns.get({
+    url         : '/patterns/table/container/pattern.html',
+    node        : document.body,
+    hooks       : {
+        titles  : {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows    : _patterns.get({
+            url: '/patterns/table/row_con/pattern.html',
+            hooks: data_source,
+        })
+    },
+    onReady: function (results) {
+        (function (model) {
+            var fun = function () {
+                var r = Math.round(19 * Math.random()),
+                    c = Math.round(3 * Math.random());
+                model[0]._rows_[r]['column_' + c]       = (Math.random() * 1000).toFixed(4);
+                model[0]._rows_[r]['background_' + c]   = 'rgb(' + Math.round(255 * Math.random()) + ', ' + Math.round(255 * Math.random()) + ', ' + Math.round(255 * Math.random()) + ')';
+                model[0]._rows_[r]['color_' + c]        = 'rgb(' + Math.round(255 * Math.random()) + ', ' + Math.round(255 * Math.random()) + ', ' + Math.round(255 * Math.random()) + ')';
+                setTimeout(fun, Math.ceil(50 * Math.random()));
+            };
+            fun();
+        }(results.model));
+    }
+}).render();</code>
+            <p>Pay your attention on the next scheme and you will see, how properties mapped in model object.</p>
+            <div class="scheme">
+                <img src="schemes/model.png" />
+            </div>
+            <p>All nested levels in your pattern has same names as hook has, but with symbol “_” at the begin and at the end - <span class="code-inline">_rows_</span>. All names of properties are same, like it was defined in pattern (HTML-file).</p>            
+            <h3>Array functionality</h3>
+            <p>As you have noticed, all levels of model are arrays. So, you can make modification of your template using all features of array. For example, you can add or remove some values.</p>
+            <tabs>
+                <buttons>
+                    <button>Add new row</button>
+                    <button>Remove row</button>
+                </buttons>
+                <tabs>
+                    <tab><code>//Add new row
+model[0]._rows_.push({
+    column_0: (Math.random() * 1000).toFixed(4),
+    column_1: (Math.random() * 1000).toFixed(4),
+    column_2: (Math.random() * 1000).toFixed(4),
+    column_3: (Math.random() * 1000).toFixed(4),
+});</code></tab>
+                    <tab><code>//Remove row
+model[0]._rows_.splice(0, 1);</code></tab>
+                </tabs>
+            </tabs>
+            <p>All changes will be immediately rendered. Here you can try an <a class="link" href="../examples/table.conditions.static.exarray.html" target="_blank"><span class="fa fa-chain"></span> example</a>.</p>
+            <h2>DOM manipulations</h2>
+            <p>Flex-Patterns allows use direct access to DOM in opposite of many other patterns-engines (let’s say reactJS for example). If developer understands, what he does – why we should deny do it? </p>
+            <p>To define some node as “will be used for DOM manipulations” you should mark such node as <span class="code-inline">{{ $name }}</span> Let’s see with <a class="link" href="../examples/table.conditions.static.exarray.html" target="_blank"><span class="fa fa-chain"></span> example</a> (which was used before).</p>
+            <tabs>
+                <buttons>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table data-type="Demo.Table"&gt;
+        &lt;tr {{ $title }}&gt;
+            &lt;th&gt;{{ titles.column_0 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_1 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_2 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_3 }}&lt;/th&gt;
+        &lt;/tr&gt;
+        {{ rows }}
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+    &lt;script type="text/javascript" src="conditions.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;tr&gt;
+        &lt;td {{ $column_0, cells }}&gt;{{ ::column_0 }}&lt;/td&gt;
+        &lt;td {{ $column_1, cells }}&gt;{{ ::column_1 }}&lt;/td&gt;
+        &lt;td {{ $column_2, cells }}&gt;{{ ::column_2 }}&lt;/td&gt;
+        &lt;td {{ $column_3, cells }}&gt;
+            &lt;div&gt;
+                &lt;p&gt;{{ ::column_3 }}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div data-style="Buttons"&gt;
+                &lt;a {{ $remove }}&gt;Remove&lt;/a&gt;
+                &lt;a {{ $add }}&gt;Add new&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>As you can see we added: <span class="code-inline">$title</span>, <span class="code-inline">$column_0-3</span>, <span class="code-inline">$cells</span>, <span class="code-inline">$add</span> and <span class="code-inline">$remove</span>. It means, that in our model will appear references to DOM manipulation objects. </p>
+            <div class="scheme">
+                <img src="schemes/dom.png" />
+            </div>
+            <p>You can see, that DOM-references have same names as were defined in template (HTML-file), but with symbol "$" at the begin.</p>
+            <p>Each DOM-reference is an object (bound with defined (in template) node(s)), which has several useful methods:</p>
+            <table>
+                <tr>
+                    <td>Method</td>
+                    <td>Description</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">add(nodeList [NodeList])</span></td>
+                    <td>Add nodes into collection. All methods will be done for all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">css(css [object])</span></td>
+                    <td>Change styles of all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">addClass(className [string])</span></td>
+                    <td>Add CSS-class to all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">removeClass(className [string])</span></td>
+                    <td>Remove CSS-class from all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">show()</span></td>
+                    <td>Show all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">hide()</span></td>
+                    <td>Hide all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">remove()</span></td>
+                    <td>Remove from page all nodes in collection. Pay your attention, collection will be cleared too.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">append(parent [node])</span></td>
+                    <td>Append all nodes from collection to target node.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">insertBefore(parent [node], before [node])</span></td>
+                    <td>Insert before defined node all nodes from collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">attr(name [string], value [string])</span></td>
+                    <td>Get or set defined attribute to all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">removeAttr(name [string])</span></td>
+                    <td>Remove defined attribute from all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">on(event [string], handle [function])</span></td>
+                    <td>Attach event-handle to all nodes in collection.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">getAsArray()</span></td>
+                    <td>Return collection of all nodes as Array.</td>
+                </tr>
+            </table>
+            <p>Now we can call our pattern and attach necessary events using DOM-references.</p>
+            <code>_patterns.get({
+    url         : '/patterns/table/container/pattern.html',
+    node        : document.body,
+    hooks       : {
+        titles  : {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows    : _patterns.get({
+            url     : '/patterns/table/row_con_buttons/pattern.html',
+            hooks   : [],
+        })
+    },
+    onReady: function (res) {
+        function add(event, indexes) {
+            var index = indexes !== void 0 ? indexes[1] : rows.length;
+            rows.splice(index, 0, {
+                column_0: (Math.random() * 1000).toFixed(4),
+                column_1: (Math.random() * 1000).toFixed(4),
+                column_2: (Math.random() * 1000).toFixed(4),
+                column_3: (Math.random() * 1000).toFixed(4),
+            });
+            rows[index].$add.on('click', add);
+            rows[index].$remove.on('click', remove);
+        };
+        function remove(event, indexes) {
+            rows.splice(indexes[1], 1);
+        };
+        var rows = res.model[0]._rows_;
+        _node('a[id="add_row"]').events().add('click', add);
+    }
+}).render();</code>
+            <p>In addition, you can add your own functionality. Let’s create method, which add background to all nodes in collection.</p>
+            <code>_patterns.classes.NODE_LIST.addMethod('setBackground', function (bg) {
+    Array.prototype.forEach.call(this.collections, function (collection) {
+        Array.prototype.forEach.call(collection, function (node) {
+            node.style.background = bg;
+        });
+    });
+});
+</code>
+            <p>Now you can call your method for any element in DOM-reference.</p>
+            <code>model[0]._rows_[0].$cells.setBackground('rgb(0,200,0)');</code>
+            <h2>Events</h2>
+            <p>Sure, in case, when you need just attach some event to node, it isn’t nice way define node as DOM-reference and bind handle to node’s event “manually”, like it was in previous example.</p>
+            <p>Fortunately, you have much more easy way: define name of handle in pattern (HTML-file).</p>
+            <p>Let’s see it on example – popup for authorization process. </p>
+            <tabs>
+                <buttons>
+                    <button>Dialog layout</button>
+                    <button>Popup</button>
+                    <button>Textbox</button>
+                    <button>Button</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;div data-type="Pattern.Login"&gt;
+    &lt;p&gt;Login&lt;/p&gt;
+    {{ login }}
+    &lt;p&gt;Password&lt;/p&gt;
+    {{ password }}
+    &lt;div data-type="Pattern.Controls"&gt;{{ controls }}&lt;/div&gt;
+&lt;/div&gt;
+</code></tab>
+                    <tab><code>&lt;div data-style="Popup" id="{ {id }}"&gt;
+    &lt;div data-style="Popup.Container"&gt;
+        &lt;div data-style="Popup.Title"&gt;
+            &lt;p data-style="Popup.Title"&gt;{{ title }}&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div data-style="Popup.Content"&gt;{{ content }}&lt;/div&gt;
+        &lt;div data-style="Popup.Bottom"&gt;
+            &lt;p data-style="Popup.Bottom"&gt;{{ bottom }}&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></tab>
+                    <tab><code>&lt;p&gt;{{ ::value }}&lt;/p&gt;
+&lt;div data-type="TextInput.Wrapper"&gt;
+    &lt;div data-type="TextInput.Container"&gt;
+        &lt;input data-type="TextInput" type="{{ type }}" value="{{ ::value }}" name="TestInput"/&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></tab>
+                    <tab><code>&lt;a data-type="Buttons.Flat" id="{{ id }}" onclick="{{ @onButtonClick }}"&gt;{{ title }}&lt;/a&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>Pay your attention on pattern of button (last one). You can see where event <span class="code-inline">onclick</span> and name of handle <span class="code-inline">onButtonClick</span> with symbol “@” before (by this symbol event’s handles should be defined).</p>
+            <p>You can use any standard event (according W3C): <span class="code-inline">onclick</span>, <span class="code-inline">onchange</span>, <span class="code-inline">onfocus</span> and etc. Also, it’s never mind: <span class="code-inline">onclick</span> or <span class="code-inline">onClick</span>.</p>
+            <p>To implement handle of event you should define it in controller.</p>
+            <tabs>
+                <buttons>
+                    <button>Common handle for both buttons</button>
+                    <button>Handles for each buttons</button>
+                    <button>JavaScript call</button>
+                </buttons>
+                <tabs>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    onReady     : function (results) { },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+    content     : {
+        controls: {
+            onButtonClick: function (event, indexes) {
+                //Do something with it
+                //In case of button "login"     -> indexes === [0, 0] => (model[0]._content_._controls_[0])
+                //In case of button "cancel"    -> indexes === [0, 1] => (model[0]._content_._controls_[1])
+            }
+        }
+    }
+};</code></tab>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    onReady     : function (results) { },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+    content     : {
+        controls: {
+            onButtonClick: [
+                function onLogin(event, indexes) {
+                    //Do something with it
+                },
+                function onCancel(event, indexes) {
+                    //Do something with it
+                }
+            ]
+        }
+    }
+};</code></tab>
+                    <tab><code>_patterns.get({
+    url     : '/patterns/popup/pattern.html',
+    node    : document.body,
+    hooks   : {
+        id      : id,
+        title   : 'Test dialog window',
+        content : {
+            login   : { type: 'text' },
+            password: { type: 'password' },
+            controls: [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }],
+        }
+    },
+    controller: Controller
+}).render();</code></tab>
+                </tabs>
+            </tabs>
+            <p>As you can see you have two ways: you can define common handle (for both buttons) or define handle for each button separately. For authorization popup both ways are okay. But when we are talking about for example tables, we can use only common handle. </p>
+            <p>Detect which button was clicked you can by argument index, which will be always in arguments of handle. </p>
+            <!--
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

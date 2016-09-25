@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!--
+    TODO:
+        - all attributes from LINK should be available from PATTERN tag. Also data should be saved from the first call and restored for next to prevent double definition    
+    -->
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Quick start</h1>
+            <h2>Installation</h2>
+            <p>Just attach script of flex-patterns to your page. That’s all.</p>
+            <div class="code-block">
+                <pre class="prettyprint linenums">&lt;script type="text/javascript" src="expatterns.min.js"&gt;&lt;/script&gt;</pre>
+            </div>
+            <h2>Included into HTML</h2>
+            <p>Create template as simple HTML file. Attach necessary JS and CSS files.</p>
+            <code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="page"&gt;
+        &lt;div class="page-container"&gt;
+            &lt;div class="page-wrapper"&gt;
+                &lt;div class="page-content-wrapper"&gt;{{ content }}&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+            <p>Places, where some content will be inserted you have to mark as {{ name }}. It’s named – hook.</p>
+            <p>Add in your page (parent page) link to pattern.</p>
+            <code>&lt;link rel="pattern" name="layout" src="/html/page/template.html" data-hooks="content" /&gt;</code>
+            <p>Read more here about LINKs in flex.patterns.</p>
+            <p>Now you can use your pattern just as tag LAYOUT (according attribute NAME in LINK).</p>
+            <code>&lt;layout&gt;
+    &lt;p&gt;Something on my page&lt;/p&gt;
+    &lt;p&gt;Something on my page&lt;/p&gt;
+    &lt;p&gt;Something on my page&lt;/p&gt;
+    &lt;p&gt;Something on my page&lt;/p&gt;
+    &lt;p&gt;Something on my page&lt;/p&gt;
+&lt;/layout&gt;</code>
+            <p>If your pattern has more than 1 hook, for example like in next example: content and footer (2 hooks).</p>
+            <code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="page"&gt;
+        &lt;div class="page-container"&gt;
+            &lt;div class="page-wrapper"&gt;
+                &lt;div class="page-content-wrapper"&gt;
+                    {{ content }}
+                &lt;/div&gt;
+                &lt;div class="page-footer-wrapper"&gt;
+                    {{ footer }}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+            <p>In this case you should define a value of each hook on page, where such pattern is used:</p>
+            <code>&lt;layout&gt;
+    &lt;content&gt;
+        &lt;p&gt;Something in content area&lt;/p&gt;
+        &lt;p&gt;Something in content area&lt;/p&gt;
+        &lt;p&gt;Something in content area&lt;/p&gt;
+    &lt;/content&gt;
+    &lt;footer&gt;
+        &lt;p&gt;Something in footer&lt;/p&gt;
+        &lt;p&gt;Something in footer&lt;/p&gt;
+        &lt;p&gt;Something in footer&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/layout&gt;</code>
+            <p>And LINK will be next for this example:</p>
+            <code>&lt;link rel="pattern" name="layout" src="/html/page/template.html" data-hooks="content, footer" /&gt;</code>
+            <p>As you see, attribute data-hooks has to have list of all used hooks. Read more here about LINKs in flex.patterns.</p>
+            <h2>JavaScript call</h2>
+            <p>The other way to include template into layout – call render method of flex.patterns:</p>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code>"use strict";
+var rows = [];
+for (var i = 0; i &lt; 100; i += 1) {
+    rows.push({
+        column_0: (Math.random() * 1000).toFixed(4),
+        column_1: (Math.random() * 1000).toFixed(4),
+        column_2: (Math.random() * 1000).toFixed(4),
+        column_3: (Math.random() * 1000).toFixed(4),
+    });
+}
+_patterns.get({
+    url: '/patterns/table/container/pattern.html',
+    node: document.body,
+    hooks: {
+        titles: {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows: _patterns.get({
+            url     : '/patterns/table/row/pattern.html',
+            hooks   : rows,
+        })
+    }
+}).render();
+</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table data-type="Demo.Table"&gt;
+        &lt;tr&gt;
+            &lt;th&gt;{{ titles.column_0 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_1 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_2 }}&lt;/th&gt;
+            &lt;th&gt;{{ titles.column_3 }}&lt;/th&gt;
+        &lt;/tr&gt;
+        {{ rows }}
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;tr&gt;
+        &lt;td&gt;{{ column_0 }}&lt;/td&gt;
+        &lt;td&gt;{{ column_1 }}&lt;/td&gt;
+        &lt;td&gt;{{ column_2 }}&lt;/td&gt;
+        &lt;td&gt;{{ column_3 }}&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></tab>
+                </tabs>
+            </tabs>
+        </div>
+    </layout>
+</body>
+</html>

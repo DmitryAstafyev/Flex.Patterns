@@ -1,0 +1,8 @@
+﻿table[data-type="Demo.Table"] td p{
+    padding :0;
+    margin  :0;
+}
+table[data-type="Demo.Table"] td p:last-child{
+    color       :rgb(150,150,150);
+    font-size   :0.8rem;
+}

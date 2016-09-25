@@ -1,0 +1,24 @@
+{
+  "name": "flex-node",
+  "version": "0.0.0",
+  "description": "FlexNode",
+  "main": "server.js",
+  "author": {
+    "name": "Dmitry",
+    "email": ""
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^1.6.0"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^2.0.1",
+    "gulp-order": "^1.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0",
+    "jshint": "^2.9.2"
+  }
+}

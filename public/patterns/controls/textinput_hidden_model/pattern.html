@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex.Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="pattern.css" />
+    <script type="text/javascript" src="conditions.js"></script>
+    <script type="text/javascript" src="controller.js"></script>
+</head>
+<body>
+    <p>{{::value}}</p>
+    <div data-type="TextInput.Wrapper">
+        <div data-type="TextInput.Container">
+            <input data-type="TextInput" type="{{type}}" value="{{::value}}" name="TestInput" {{$input}} onblur="{{@onblur}}"/>
+        </div>
+        <!--type=password-->
+        <div data-type="TextInput.Info.Icon"></div>
+        <div data-type="TextInput.Info.Popup">
+            <p data-type="TextInput.Info.Popup">You can use in password only letters, number and _</p>
+        </div>
+        <!--type-->
+    </div>
+    <!--showinfo=show-->
+    <p data-type="TextInput.Error" data-not_valid="{{::not_valid}}">{{not_valid_message}}</p>
+    <!--showinfo-->
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿nav.panel{
+    display     :block;
+    position    :absolute;
+    top         : 0px;
+    width       : 16rem;
+    height      :100%;
+    background  : rgb(33,33,33); 
+    min-height  :85rem;
+}
+    nav.panel *{
+        color           :rgb(250,250,250);
+    }
+    div.logo{
+        position        :relative;
+        width           :8rem;
+        height          :8rem;
+        margin          :2rem 4rem;
+        background-image:url('orange.png');
+        background-size :cover;
+    }
+    p.logo{
+        text-transform  :uppercase;
+        font-size       :1.9rem;
+        text-align      : center;
+        margin          : 0;
+    }
+    p.sub-logo{
+        text-transform  :uppercase;
+        font-size       :1rem;
+        text-align      : center;
+        letter-spacing  : 0.3px;
+        margin          : 0;
+        padding         : 0;
+    }
+    p.title{
+        text-transform  :uppercase;
+        font-size       :1.5rem;
+        padding         :0;
+        margin          :3rem 2rem 0.5rem 2rem;
+    }
+    p.text{
+        font-size       :1rem;
+        padding         :0;
+        margin          :0.5rem 2rem;
+        color           :rgb(225,225,225);
+    }
+    a.download{
+        display         :inline-block;
+        position        :relative;
+        text-decoration :none;
+        cursor          :pointer;
+    }
+        a.download:hover:after{
+            position        :absolute;
+            display         :block;
+            content         :'';
+            width           :100%;
+            border-bottom   :1px dotted rgb(225,225,225);
+        }

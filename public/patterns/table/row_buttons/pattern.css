@@ -1,0 +1,48 @@
+﻿table[data-type="Demo.Table"] td p{
+    padding :0;
+    margin  :0;
+}
+table[data-type="Demo.Table"] td p:last-child{
+    color       :rgb(150,150,150);
+    font-size   :0.8rem;
+}
+div[data-style="Buttons"]{
+    position        :absolute;
+    white-space     :nowrap; 
+    margin-top      :-2.4rem;
+    right           :-13rem;
+    display         :none;
+}
+div[data-style="Buttons"]:after{
+    position        :absolute;
+    content         :'';
+    width           :2rem;
+    height          :100%;
+    background      :rgba(255,255,255,0.001);
+    top             :0;
+    left            :-1.5rem;
+}
+div[data-style="Buttons"] a,
+a[data-style="Button"]{
+    display         :inline-block;
+    position        :relative;
+    font-size       :1rem;
+    font-family     :'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', 'DejaVu Sans Condensed', sans-serif;
+    padding         :0.2rem 0.5rem;
+    margin          :0.5rem 0.5rem;
+    color           :rgb(30,30,30);
+    background      :rgb(230,230,230);
+    text-decoration :none;
+    cursor          :pointer;
+}
+div[data-style="Buttons"] a:hover,
+a[data-style="Button"]:hover{
+    color       :rgb(250,250,250);
+    background  :rgb(30,30,30);
+}
+table[data-type="Demo.Table"] tr:not(:first-child):hover div[data-style="Buttons"]{
+    display:block;
+}
+div[data-style="Buttons"]:hover{
+    display:block;
+}

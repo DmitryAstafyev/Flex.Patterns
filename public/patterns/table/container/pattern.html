@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex.Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="pattern.css" />
+</head>
+<body>
+    <table data-type="Demo.Table">
+        <tr style="color:{{::color}};background:{{::background}};">
+            <th {{$column_0,title}} onclick="{{@onclick_0}}">{{titles.column_0}}</th>
+            <th {{$column_1,title}} onclick="{{@onclick_1}}">{{titles.column_1}}</th>
+            <th {{$column_2,title}} onclick="{{@onclick_2}}">{{titles.column_2}}</th>
+            <th {{$column_3,title}} onclick="{{@onclick_3}}">{{titles.column_3}}</th>
+        </tr>
+        {{rows}}
+    </table>
+</body>
+</html>

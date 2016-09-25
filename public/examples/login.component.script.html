@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.debug();
+        var id = flex.unique();
+        _patterns.get({
+            url     : '/components/login/component.html',
+            node    : document.body,
+            hooks   : {
+                id      : id,
+                title   : 'Test dialog window',
+                content : {
+                    login       : {
+                        type                : 'text',
+                        not_valid_message   : 'Sorry, but your login should not be shorter than 2 symbols. Please, try again.',
+                        not_valid           : false
+                    },
+                    password    : {
+                        type                : 'password',
+                        not_valid_message   : 'Sorry, but your password should not be shorter than 6 symbols. Please, try again.',
+                        not_valid           : false
+                    },
+                    controls    : [
+                        { title: 'login',   id: 'login_button'  },
+                        { title: 'cancel',  id: 'cancel_button' }
+                    ],
+                }
+            }
+        }).render();
+    </script>
+</body>
+</html>

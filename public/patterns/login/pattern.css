@@ -1,0 +1,21 @@
+﻿div[data-type="Pattern.Login"]{
+    position:relative;
+    width   :100%;
+    padding :0;
+    margin  :0;
+}
+div[data-type="Pattern.Login"] p{
+    position    :relative;
+    font-size   :1rem;
+    font-family :'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', 'DejaVu Sans Condensed', sans-serif;
+    padding     :0;
+    margin      :1rem 0 0.2rem 0.5rem;
+    color       :rgb(30,30,30);
+}
+div[data-type="Pattern.Controls"]{
+    position    :relative;
+    width       :100%;
+    padding     :0;
+    margin      :1rem 0;
+    text-align  :right;
+}

@@ -1,0 +1,463 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Flex features</h1>
+            <p>Flex.Patterns solution is based on flex (it’s something middle between library and framework, because can be both). And you can use all features of Flex.</p>
+            <h2>Accessors</h2>
+            <p>Flex.patterns is built based on flex. It gives developer several short accessors. </p>
+            <ul>
+                <li><span class="code-inline">_node</span>(string || node, useCache [default: false], context [default: document])</li>
+                <li><span class="code-inline">_nodes</span>(string || array[node] , useCache [default: false], context [default: document])</li>
+                <li><span class="code-inline">_object</span>(object)</li>
+                <li><span class="code-inline">_array</span>(object)</li>
+                <li><span class="code-inline">_string</span>(string)</li>
+            </ul>
+            <p>As you’ve guessed, such wrappers open access to some functionality. Let’s discover default functionality (from box).</p>
+            <p>All methods for _node are actual and for _nodes.</p>
+            <table>
+                <tr>
+                    <td>Caller</td>
+                    <td>Returing</td>
+                    <td>Description</td>
+                </tr>
+                <tr>
+                    <td colspan="3">_node and _nodes wrappers</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Html module. For work with DOM</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().size().get()</span></td>
+                    <td rowspan="4"><span class="code-inline">{ height: number, width: number } </span></td>
+                    <td rowspan="4">Collection of methods, which calculate size of node by different ways. Method <span class="code-inline">get()</span> is universal. Other methods can be useful in specific situations.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().size().getWithMargin()</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().size().getByClientRectSize()</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().size().getByOffset()</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().position().byPage()</span></td>
+                    <td rowspan="2"><span class="code-inline">{ top: number, left: number }</span></td>
+                    <td rowspan="2">These methods calculate position of node on the page.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().position().byWindow()</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().styles().apply(styles)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Applies styles to defined node</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().styles().redraw()</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Force redrawing of node on the page</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().styles().addClass(className)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Add CSS class to node</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().styles().removeClass(className)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove CSS class from node</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().find().childByAttr(node_name, attribute)</span></td>
+                    <td><span class="code-inline">node</span></td>
+                    <td>
+                        Find child of defined node with defined attribute. Parameters attribute is an object:
+                        { name: string, value : any}
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().find().childByType(node_name)</span></td>
+                    <td><span class="code-inline">node</span></td>
+                    <td>Find child of defined node with defined type.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().find().parentByAttr(attribute)</span></td>
+                    <td><span class="code-inline">node</span></td>
+                    <td>
+                        Find parent of defined node with defined attribute. Parameters attribute is an object:
+                        { name: string, value : any}
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).html().scroll().position()</span></td>
+                    <td>
+                        <span class="code-inline">
+                            {
+                            top: number,
+                            left: number,
+                            height: number,
+                            width: number
+                            }
+                        </span>
+                    </td>
+                    <td>Calculate parameters of scroll for defined node</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Binds module. Controls bindings functionality</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).bindingAttrs().bind(attr, handle)</span></td>
+                    <td><span class="code-inline">id</span></td>
+                    <td>Binds attribute with handle</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).bindingAttrs().unbind(attr, id)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove handle for defined attribute by ID</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).bindingAttrs().kill(attr)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove all handle for defined attribute</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).bindingProps().bind(prop, handle)</span></td>
+                    <td><span class="code-inline">id</span></td>
+                    <td>Binds property with handle</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).bindingProps().unbind(prop, id)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove handle for defined property by ID</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).bindingProps().kill(prop)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove all handle for defined property</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Events module. Extended controller of events</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><span class="code-inline">_node(sel).events().add(type, handle)</span></p>
+                        <p><span class="code-inline">_node(sel).events().add(type, handle, id)</span></p>
+                        <p><span class="code-inline">_node(sel).events().add(type, handle, id, touch)</span></p>
+                    </td>
+                    <td><span class="code-inline">id</span></td>
+                    <td>Attach handle to defined type of event. Parameters type and handle are obligatory. Parameters id and touch can be postponed. If <span class="code-inline">touch = true</span> will be attached analogue events for touch-devices. </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><span class="code-inline">_node(sel).events().remove(type, handle)</span></p>
+                        <p><span class="code-inline">_node(sel).events().remove(type, null, id)</span></p>
+                    </td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove handle by id or by handle. </td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_node(sel).events().call(type)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Fires defined event for defined node</td>
+                </tr>
+                <tr>
+                    <td colspan="3">_object wrapper</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_object(obj).forEach(function(key, value){ })</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Applies callback to each property of defined object</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><span class="code-inline">_object(obj).extend()</span></p>
+                        <p><span class="code-inline">_object(obj).extend(target)</span></p>
+                        <p><span class="code-inline">_object(obj).extend(target, exclusion)</span></p>
+                    </td>
+                    <td><span class="code-inline">object</span></td>
+                    <td>Copies all properties of defined object to target object (if it’s defined). If in array <span class="code-inline">exclusion</span> is defined some names of properties, such properties will be postponed</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><span class="code-inline">_object(obj).copy()</span></p>
+                        <p><span class="code-inline">_object(obj).copy(target)</span></p>
+                    </td>
+                    <td><span class="code-inline">object</span></td>
+                    <td>Makes copy of defined object. If target-object is defined, will place copies of properties into it.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><span class="code-inline">_object(obj).isValueIn(value)</span></p>
+                        <p><span class="code-inline">_object(obj).isValueIn(value, nesting)</span></p>
+                    </td>
+                    <td><span class="code-inline">bool</span></td>
+                    <td>Try to find value inside object. If <span class="code-inline">nesting = true</span> – will make search include nested objects.</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_object(obj).getByPath(path)</span></td>
+                    <td><span class="code-inline">value of found object</span></td>
+                    <td>Try find value of property by string path, like: <span class="code-inline">"prop_0.prop_1.prop_2"</span></td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_object(obj).createInstanceClass()</span></td>
+                    <td><span class="code-inline">Instance of class</span></td>
+                    <td>Create instance of class. </td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_object(obj).binding().bind(property, handle)</span></td>
+                    <td><span class="code-inline">id</span></td>
+                    <td>Binds property with handle</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_object(obj).binding().unbind(property, id)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove handle for defined property by ID</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">_object(obj).binding().kill(property)</span></td>
+                    <td><span class="code-inline">void</span></td>
+                    <td>Remove all handle for defined property</td>
+                </tr>
+            </table>
+            <h2>Improving accessors</h2>
+            <p>Okay you have some functionality from box, but the most important thing is – you can add your own functionality via next interface. </p>
+            <code>//For single node
+flex.callers.define.node   (parameters);
+//For several nodes
+flex.callers.define.nodes  (parameters);
+//For single array
+flex.callers.define.array  (parameters);
+//For single string
+flex.callers.define.string (parameters);
+//For single object
+flex.callers.define.object (parameters);
+</code>
+            <p>For all callers syntax is same.</p>
+            <code>flex.callers.define.nodes(
+   //Define namespace of chain
+   //You can use any number of parts as you want, for example:
+   // &gt; nodes.attr
+   // &gt; nodes.attrs.set
+   // &gt; nodes.attrs.get and etc.
+   'attr',
+   //Define handle
+   function (name, value) {
+       //Object [this] will have only one property - [target].
+       //[this.target] can be some value (or object) if it's single call (node, string, object and etc) or it will be array for: nodes
+       Array.prototype.forEach.call(this.target, function (target) {
+           result.push(methods.attr(target, name, value));
+       });
+       return results;
+   }
+);
+
+//All parts of chain will be a functions, so to call method of chain you should use next:
+_node('selector').attrs(arg);
+_node('selector').nodes().attrs(arg);
+_node('selector').nodes().attrs().get();
+_node('selector').nodes().attrs().set(arg);
+</code>
+            <p>As you can see you can easily extend functionality of your application and add necessary addition methods for nodes, for objects or for any other type.</p>
+            <h2>Modularity system</h2>
+            <h3>Pattern of module</h3>
+            <p>Flex supports two kind of modules. Which one to use – is only your decision.</p>
+            <ul>
+                <li>Module with support register;</li>
+                <li>Module without support register.</li>
+            </ul>
+            <tabs>
+                <buttons>
+                    <button>Module with support register</button>
+                    <button>Module without support register</button>
+                </buttons>
+                <tabs>
+                    <tab><code>var protofunction = function () { };
+protofunction.prototype = function () {
+    var privates        = null,
+        something       = null;
+    function something() {
+
+    };
+    return {
+        method: something
+    };
+};
+flex.modules.attach({
+    name            : 'name_of_module',
+    protofunction   : protofunction
+});</code></tab>
+                    <tab><code>_append({
+    name            : 'name_of_module',
+    require         : [
+        { url: 'ATTACH::other_module.js'        },
+        { url: '../css/some_resource.css'   }
+    ],
+    constructor : function () { },
+    module      : function () {
+        var //Get modules
+            other_module = flex.libraries.other_module.create();
+        //Here is body of module
+        return {
+            //Here is some methods and properties of module
+        };
+    },
+});</code></tab>
+                </tabs>
+            </tabs>
+            <h3>Simple module</h3>
+            <p>Let’s start from simplest way: modules without support register. Such modules can be created using method <span class="code-inline">_append</span>. </p>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">name</td>
+                    <td>yes</td>
+                    <td class="code-inline">string</td>
+                    <td>Name of module. This name will be used in next for initialization of module. Develop can create namespaces like: level0.level1.level2 and etc.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">require</td>
+                    <td>no</td>
+                    <td class="code-inline">array</td>
+                    <td>List of required modules or resources. Module will be initialized only after all required module (or resources) will be loaded.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">constructor</td>
+                    <td>no</td>
+                    <td class="code-inline">function</td>
+                    <td>Constructor of module. This function will be handled only once.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">module</td>
+                    <td>yes / no</td>
+                    <td class="code-inline">function</td>
+                    <td>"Body" of module. If property launch isn’t used, property module should be defined.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">launch</td>
+                    <td>yes / no</td>
+                    <td class="code-inline">function</td>
+                    <td>If this function is defined, flex will start whole application from executing this function. Let’s say – it’s a start point of whole application. If property launch is used, property module will be postponed.</td>
+                </tr>
+            </table>
+            <p>Common structure of module is next:</p>
+            <code>_append({
+    //OBLIGATORY
+    //Name of your module. This name will be used as reference to this module from other modules
+    name        : 'flex_module',
+    //OPTIONAL
+    //List of modules (or resources), which should be loaded before
+    require     : [
+        { url: 'ATTACH::other_module.js'    },
+        { url: '../css/some_resource.css'   }
+    ],
+    //OPTIONAL
+    //Constructor of module
+    constructor : function () { },
+    //OBLIGATORY
+    //Body of module
+    module      : function () {
+        var //Get modules
+            other_module = flex.libraries.other_module.create();
+        //Here is body of module
+        return {
+            //Here is some methods and properties of module
+        };
+    },
+});</code>
+            <p>After all modules will be loaded, all references will be places into global storage: <span class="code-inline">flex.libraries</span>. To initialize some module, you should call method <span class="code-inline">create</span> of necessary module. So, we can initialize module “flex_module” from our example by next code:</p>
+            <code>var flex_module = flex.libraries.flex_module.create();</code>
+            <p>You can create more complex names. For example, site.ui.scrollbox. In this case caller will be:</p>
+            <code>var scrollbox = flex.libraries.site.ui.scrollbox.create();</code>
+            <p>To define start point of your application you should use property <span class="code-inline">launch</span> instead <span class="code-inline">module</span>. And sure, only one module in whole application can be defined with property <span class="code-inline">launch</span>. </p>
+            <code>_append({
+    name        : 'main',
+    require     : [
+        { url: 'ATTACH::module_0.js'        },
+        { url: 'ATTACH::module_1.js'        },
+        { url: 'ATTACH::module_2.js'        },
+        { url: '../css/some_resource.css'   },
+        { url: '../js/some_lib.js'          },
+        { url: '../js/jquery.js'            },
+    ],
+    launch      : function () {
+        //Start your application from this point
+        return {
+            //Here is some methods and properties of module
+        };
+    },
+});</code>
+            <script>
+            </script>
+            <!--
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

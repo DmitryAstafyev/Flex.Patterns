@@ -1,0 +1,20 @@
+﻿div.code-block{
+    position    : relative;
+    width       : calc(100% - 3rem);
+    margin      : 1rem 1.5rem;
+    overflow-x  : auto;
+    overflow-y  : hidden;
+}
+    div.code-block,
+    div.code-block pre,
+    div.code-block pre *{
+        background  : rgb(245,245,245);
+    }
+    div.code-block *{
+        font-family: 'Lucida Console', Monaco, 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace!important;
+        font-size:0.8rem;
+    }
+@media screen and (max-width: 1200px) {
+}
+@media screen and (max-width: 600px) {
+}

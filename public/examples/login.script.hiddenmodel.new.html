@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.debug();
+        var id = flex.unique();
+        var Controller = function () { };
+        Controller.prototype = {
+            onReady: function (results) {
+                var self = this;
+                setTimeout(function () {
+                    self.instance.update({
+                        title   : 'Updated dialog window',
+                        content: {
+                            controls    : [
+                                { title: 'UPD: login',  id: 'login_button'  },
+                                { title: 'UPD: cancel', id: 'cancel_button' }
+                            ],
+                        }
+                    });
+                }, 4000);
+            },
+            content: {
+                login : {
+                    onblur: function (event, index) {
+                        window.console.log(event);
+                    }
+                },
+                password : {
+                    onblur: function (event, index) {
+                        window.console.log(event);
+                    }
+                },
+                controls: {
+                    onclick: [
+                        function onLogin(event, index) {
+                            var login       = this.model._content_[0]._login_[0],
+                                password    = this.model._content_[0]._password_[0];
+                            if (login.value === null || (typeof login.value === 'string' && login.value.length < 2)) {
+                                login.not_valid = true;
+                                setTimeout(function () { login.not_valid = false; }, 1000);
+                            }
+                            if (password.value === null || (typeof password.value === 'string' && password.value.length < 4)) {
+                                password.not_valid = true;
+                                setTimeout(function () { password.not_valid = false; }, 1000);
+                            }
+                            window.console.log('onLogin');
+                        },
+                        function onCancel(event, index) {
+                            window.console.log('onCancel');
+                        }
+                    ]
+                }
+            }
+        };
+        var controller = new Controller();
+        _patterns.get({
+            url     : '/patterns/popup/pattern.html',
+            node    : document.body,
+            hooks   : {
+                id      : id,
+                title   : 'Test dialog window',
+                content : _patterns.get({
+                    url     : '/patterns/login/pattern.html',
+                    hooks   : {
+                        login   : _patterns.get({
+                            url     : '/patterns/controls/textinput_hidden_model/pattern.html',
+                            hooks   : {
+                                type                : 'text',
+                                not_valid_message   : 'Sorry, but your login should not be shorter than 2 symbols. Please, try again.',
+                                not_valid           : false
+                            }
+                        }),
+                        password: _patterns.get({
+                            url     : '/patterns/controls/textinput_hidden_model/pattern.html',
+                            hooks   : {
+                                type                : 'password',
+                                not_valid_message   : 'Sorry, but your password should not be shorter than 6 symbols. Please, try again.',
+                                not_valid           : false
+                            }
+                        }),
+                        controls: _patterns.get({
+                            url     : '/patterns/buttons/flat/pattern.html',
+                            hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+                        }),
+                    },
+                })
+            },
+            controller: controller,
+            /*
+            onReady: function (results) {
+                var instance = this,
+                    dom     = results.dom,
+                    model   = results.model;
+                
+                dom._content_[0]._controls_[0].button.on('click', function () {
+                    var _model = model._content_[0];
+                    if (_model._login_[0].value.length < 2) {
+                        _model._login_[0].not_valid = true;
+                        setTimeout(function () {
+                            _model._login_[0].not_valid = false;
+                        }, 2000);
+                    }
+                    if (_model._password_[0].value.length < 2) {
+                        _model._password_[0].not_valid = true;
+                        setTimeout(function () {
+                            _model._password_[0].not_valid = false;
+                        }, 2000);
+                    }
+                });
+            }*/
+        }).render();
+    </script>
+</body>
+</html>

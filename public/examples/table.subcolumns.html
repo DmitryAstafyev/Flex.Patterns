@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+            _patterns.debug();
+            var data_source = [];
+            for (var i = 0; i < 1000; i += 1) {
+                data_source.push({
+                    column_0: (Math.random() * 1000).toFixed(4),
+                    column_1: (Math.random() * 1000).toFixed(4),
+                    column_2: (Math.random() * 1000).toFixed(4),
+                    column_3: _patterns.get({
+                        url: '/patterns/table/sub/pattern.html',
+                        hooks: [{
+                            title_0: (Math.random() * 1000).toFixed(4),
+                            title_1: (Math.random() * 1000).toFixed(4),
+                            title_2: (Math.random() * 1000).toFixed(4),
+                            title_3: (Math.random() * 1000).toFixed(4),
+                        },
+                        {
+                            title_0: (Math.random() * 1000).toFixed(4),
+                            title_1: (Math.random() * 1000).toFixed(4),
+                            title_2: (Math.random() * 1000).toFixed(4),
+                            title_3: (Math.random() * 1000).toFixed(4),
+                        }],
+                    }),
+                    dataattr : Math.random()
+                });
+                if (i === 0) {
+                    data_source[0].column_3 = null;
+                }
+                if (i === 4) {
+                    data_source[2].column_3 = null;
+                }
+                if (i === 998) {
+                    data_source[998].column_3 = null;
+                }
+                if (i === 999) {
+                    data_source[999].column_3 = null;
+                }
+            }
+            _patterns.get({
+                url : '/patterns/table/container/pattern.html',
+                node: document.body,
+                /*
+                map : {
+                    rows: {
+                        url: '/patterns/table/row/pattern.html',
+                        hooks: {
+                            column_3: {
+                                url: '/patterns/table/sub/pattern.html'
+                            }
+                        }
+                    }
+                },
+                hooks: {
+                    titles: {
+                        column_0: 'Column #0',
+                        column_1: 'Column #1',
+                        column_2: 'Column #2',
+                        column_3: 'Column #3',
+                    },
+                    rows: null
+                }*/
+                hooks: {
+                    titles: {
+                        column_0: 'Column #0',
+                        column_1: 'Column #1',
+                        column_2: 'Column #2',
+                        column_3: 'Column #3',
+                    },
+                    rows: _patterns.get({
+                        url: '/patterns/table/row/pattern.html',
+                        hooks: data_source,
+                    })
+                }
+            }).render();
+        }());
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+﻿div.page{
+    position    : relative;
+    width       : 100%;
+}
+    div.page:after{
+        content : '';
+        display : block;
+        clear   : both;
+    }
+    div.page-container{
+        position: relative;
+        right   : 50%;
+        float   : right;
+    }
+        div.page-wrapper{
+            position: relative;
+            z-index : 1;
+            right   : -50%;
+        }
+            div.page-content-wrapper{
+                position        :relative;
+                width           :1200px;
+                background      :rgb(255,255,255);
+                margin-top      :10rem;
+                margin-bottom   :10rem;
+                box-shadow      : 0 0 1rem rgba(0,0,0,0.4);
+                background      : rgb(221,221,221); /* Old browsers */
+                background      : -moz-linear-gradient(-45deg,  rgba(221,221,221,1) 0%, rgba(252,252,252,1) 100%); /* FF3.6-15 */
+                background      : -webkit-linear-gradient(-45deg,  rgba(221,221,221,1) 0%,rgba(252,252,252,1) 100%); /* Chrome10-25,Safari5.1-6 */
+                background      : linear-gradient(135deg,  rgba(221,221,221,1) 0%,rgba(252,252,252,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter          : progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#fcfcfc',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+                min-height      :1000px;
+            }
+            div.page-content-wrapper div.page-content{
+                position    :relative;
+                display     :block;
+                margin-left :16rem;
+                height      :auto;
+                width       : calc(100% - 16rem);
+                padding     :2rem 0rem;
+                min-height  :85rem;
+            }
+@media screen and (max-width: 1200px) {
+    div.page-container{
+        width       :calc(100% - 2rem);
+    }
+    div.page-wrapper{
+        width       : 100%;
+    }
+    div.page-content-wrapper{
+        width       :100%;
+    }
+}
+@media screen and (max-width: 600px) {
+    div.page-container {
+        width: calc(100% - 1rem);
+    }
+
+    div.page-wrapper {
+        width: 100%;
+    }
+
+    div.page-content-wrapper {
+        width: 100%;
+    }
+}

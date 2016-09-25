@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex.Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="pattern.css" />
+    <script type="text/javascript" src="conditions.js"></script>
+</head>
+<body>
+    <tr>
+        <td {{$column_0, cells}} style="background:{{::background_0}};color:{{::color_0}}" data-type="{{datatypehook}}">{{::column_0}}</td>
+        <td {{$column_1, cells}} style="background:{{::background_1}};color:{{::color_1}}">{{::column_1}}</td>
+        <td {{$column_2, cells}} style="background:{{::background_2}};color:{{::color_2}}">{{::column_2}}</td>
+        <td {{$column_3, cells}} style="background:{{::background_3}};color:{{::color_3}}">
+            <div>
+                <p>{{::column_3}}</p>
+                <!--value_sets=0-->
+                    <!--sub_value_sets=0-->
+                        <p>This value is less than 111</p>
+                    <!--sub_value_sets-->
+                    <!--sub_value_sets=0.5-->
+                        <p>This value is more than 111 and less than 222</p>
+                    <!--sub_value_sets-->
+                    <!--sub_value_sets=1-->
+                        <p>This value is more than 222 and less than 333</p>
+                    <!--sub_value_sets-->
+                <!--value_sets-->
+                <!--value_sets=0.5-->
+                    <p>This value is more than 333 and less than 666</p>
+                <!--value_sets-->
+                <!--value_sets=1-->
+                    <p>This value is more than 666 and less than 1000</p>
+                <!--value_sets-->
+            </div>
+        </td>
+    </tr>
+</body>
+</html>

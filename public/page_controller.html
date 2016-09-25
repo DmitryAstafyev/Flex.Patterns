@@ -1,0 +1,499 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Controllers and callbacks</h1>
+            <h2>Callbacks</h2>
+            <p>Flex-Patterns has only two types of callbacks:</p>
+            <ul>
+                <li><span class="code-inline">onReady</span>. Will be called after template will be successfully initialized and rendered.</li>
+                <li><span class="code-inline">onFail</span>. Will be called in case, if initialization or rendering will be failed.</li>
+            </ul>
+            <p>Let’s see an example.</p>
+            <code>_patterns.get({
+    url     : 'some_url_to_pattern',
+    onReady : function (results) {
+        var instance    = this,             //or instance = results.instance
+            listener    = results.listener,
+            model       = results.model,
+            exchange    = results.exchange;
+    },
+    onFail  : function () {
+    },
+}).render();</code>
+            <p>Also you can define callbacks not only for JavaScript call. If you mount pattern into layout, you can define names of callbacks with attributes.</p>
+            <tabs>
+                <buttons>
+                    <button>No namespace</button>
+                    <button>Using namespace</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;pattern onReady="myPatternOnReady" onFail="myPatternOnFail" data-pattern="/patterns/popup/pattern.html" data-hooks="id, title, content, login, password, type, controls"&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content&gt;
+        &lt;login&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/pattern&gt;
+&lt;script type="text/javascript"&gt;
+    window['myPatternOnReady'] = function (results) {
+        var instance    = this,             //or instance = results.instance
+            listener    = results.listener,
+            model       = results.model,
+            exchange    = results.exchange;
+    };
+    window['myPatternOnFail'] = function () {
+        //Do something
+    };
+&lt;/script&gt;</code></tab>
+                    <tab><code>&lt;pattern onReady="myCore.popups.onReady" onFail="myCore.popups.onFail" data-pattern="/patterns/popup/pattern.html" data-hooks="id, title, content, login, password, type, controls"&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content&gt;
+        &lt;login&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/pattern&gt;
+&lt;script type="text/javascript"&gt;
+    window['myCore'] = {
+        popups: {
+            onReady: function (results) {
+                var instance    = this,             //or instance = results.instance
+                    listener    = results.listener,
+                    model       = results.model,
+                    exchange    = results.exchange;
+            },
+            onFail : function () { }
+        }
+    };
+&lt;/script&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <h2>Controller</h2>
+            <p>You can attach controller via two ways:</p>
+            <ul>
+                <li>During JavaScript call;</li>
+                <li>In template.</li>
+            </ul>
+            <tabs>
+                <buttons>
+                    <button>During JavaScript call</button>
+                    <button>In template (file: controller.js)</button>
+                    <button>Template with controller</button>
+                </buttons>
+                <tabs>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    //Pay your attantion, here is same names, like callbacks have
+    onReady     : function (results) { },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+    myMethod_0  : function () { },
+    myMethod_1  : function () { },
+    myMethod_N  : function () { },
+};
+
+_patterns.get({
+    url         : 'some_url_to_pattern',
+    controller  : Controller
+}).render();</code></tab>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    onReady     : function (results) { },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+    myMethod_0  : function () { },
+    myMethod_1  : function () { },
+    myMethod_N  : function () { },
+};
+
+_controller(Controller);</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+    &lt;!-- =========== CONTROLLER =========== --&gt;
+    &lt;script type="text/javascript" src="controler.js"&gt;&lt;/script&gt;
+    &lt;!-- =========== CONTROLLER =========== --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div data-type="Pattern.Login"&gt;
+        &lt;p&gt;Login&lt;/p&gt;
+        {{ login }}
+        &lt;p&gt;Password&lt;/p&gt;
+        {{ password }}
+        &lt;div data-type="Pattern.Controls"&gt;{{ controls }}&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></tab>
+                </tabs>
+            </tabs>
+            <p>But also you can do this:</p>
+            <code>_controller(function (results) {
+    var instance    = this,             //or instance = results.instance
+        listener    = results.listener,
+        model       = results.model,
+        exchange    = results.exchange;
+});</code>
+            <p>In this case controller’s behavior will be same like callback <span class="code-inline">onReady</span> has.</p>
+            <p>To attach controller to your template you have to do just two actions:</p>
+            <ul>
+                <li>Create JS-file with controller “body” (like in example);</li>
+                <li>Add reference (via tag SCRIPT) to JS-file in your template.</li>
+            </ul>
+            <h2>Structure of controller</h2>
+            <p>Controller is a “class”, which will be initialized after pattern will be ready. Flex-Pattern can detect controller only if prototype of constructor has at least one of next methods:</p>
+            <ul>
+                <li><span class="code-inline">onReady</span></li>
+                <li><span class="code-inline">onUpdate</span></li>
+                <li><span class="code-inline">setInstance</span></li>
+            </ul>
+            <p>If function-constructor doesn’t have any from listed methods, flex-patterns will use such function as callback <span class="code-inline">onReady</span>.</p>
+            <p>Here is structure of controller:</p>
+            <code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    onReady     : function (results) { },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+    //Here you can add any your methods
+};</code>
+            <p>Pay your attention on next fragment of code:</p>
+            <code>this.instance   = results.instance;
+this.listener   = results.listener;
+this.model      = results.model;
+this.exchange   = results.exchange;</code>
+            <p>Flex-Pattern in any case will create these properties (<span class="code-inline">instance</span>, <span class="code-inline">listener</span>, <span class="code-inline">model</span> and <span class="code-inline">exchange</span>). So, strongly recommend do not use these names in your controller.</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">onReady</td>
+                    <td>This method will be called only once, when pattern will be initialized and rendered.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">onUpdate</td>
+                    <td>This method will be called each time of updating pattern.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">setInstance</td>
+                    <td>This method will be called when pattern will be initialized and rendered and each time of updating pattern</td>
+                </tr>
+            </table>
+            <h2>Object results</h2>
+            <p>Object results has only four properties:</p>
+            <ul>
+                <li><span class="code-inline">instance</span> – reference to just initialized instance of your pattern;</li>
+                <li><span class="code-inline">listener</span> – controller of internal events (in scope of current pattern or in global scope)</li>
+                <li><span class="code-inline">model</span> – reference to model of pattern</li>
+                <li><span class="code-inline">exchange</span> – special storage for exchanging of data between nested patterns in all directions (from child to parent and from parent to child).</li>
+            </ul>
+            <h3>Instance</h3>
+            <p>Object <span class="code-inline">instance</span> has only one useful method: <span class="code-inline">update</span>. Using this method, you can update any hook of your pattern. Let’s see within example.</p>
+            <tabs>
+                <buttons>
+                    <button>Update in callback</button>
+                    <button>Update in controller</button>
+                </buttons>
+                <tabs>
+                    <tab><code>_patterns.get({
+    url     : '/patterns/popup/pattern.html',
+    node    : document.body,
+    hooks   : {
+        id      : flex.unique(),
+        title   : 'Test dialog window',
+        content : _patterns.get({
+            url     : '/patterns/patterns/login/pattern.html',
+            hooks   : {
+                login   : _patterns.get({
+                    url     : '/patterns/controls/textinput/pattern.html',
+                    hooks   : {
+                        type: 'text',
+                    }
+                }),
+                password: _patterns.get({
+                    url     : '/patterns/controls/textinput/pattern.html',
+                    hooks   : {
+                        type: 'password',
+                    }
+                }),
+                controls: _patterns.get({
+                    url     : '/patterns/buttons/flat/pattern.html',
+                    hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+                }),
+            }
+        })
+    },
+    onReady: function (results) {
+        var instance = this;
+        instance.update({
+            title   : 'Updated title',
+            content : {
+                controls: [
+                    { title: 'UPD: Login' },
+                    { title: 'UPD: Cancel' }
+                ]
+            }
+        });
+    },
+}).render();</code></tab>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    onReady     : function (results) {
+        this.instance.update({
+            title   : 'Updated title',
+            content : {
+                controls: [
+                    { title: 'UPD: Login' },
+                    { title: 'UPD: Cancel' }
+                ]
+            }
+        });
+    },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+};
+_controller(Controller);</code></tab>
+                </tabs>
+            </tabs>
+            <p>In this example, we change title of our popup and captions of buttons. </p>
+            <p>Pay your attention, using method <span class="code-inline">update</span> you skip definition of sub-patterns.</p>
+            <p>Each time after pattern will be updated, callback <span class="code-inline">onUpdate</span> will be called.</p>
+            <h3>Listener</h3>
+            <p>Listener is a good way to organize communication between nested patterns and different patterns on page. Object listener has next methods:</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Scope</th>
+                    <th>Return</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">bind(event, handle, [id])</td>
+                    <td>pattern</td>
+                    <td class="code-inline">ID [STRING]</td>
+                    <td>Attach handle to event in scope of current pattern. Parameter ID can be postponed.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">bindGlobal(event, handle, [id])</td>
+                    <td>global</td>
+                    <td class="code-inline">ID [STRING]</td>
+                    <td>Attach handle to event in global scope. Parameter ID can be postponed.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">trigger(event, params)</td>
+                    <td>pattern</td>
+                    <td class="code-inline">BOOLEAN</td>
+                    <td>Handled event in scope of current pattern.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">triggerGlobal(event, params)</td>
+                    <td>global</td>
+                    <td class="code-inline">BOOLEAN</td>
+                    <td>Handled event in global scope.</td>
+                </tr>
+            </table>
+            <p>Let’s see on example. We have two controllers of two different patterns on page (never mind, what is it).</p>
+            <tabs>
+                <buttons>
+                    <button>Controller A</button>
+                    <button>Controller B</button>
+                    <button>Result (console)</button>
+                </buttons>
+                <tabs>
+                    <tab><code>//Controller of Pattern "A"
+var ControllerA = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+ControllerA.prototype = {
+    onReady     : function (results) {
+        this.listener.bind('eventA', function (params) {
+            console.log('Handled: event A');
+        });
+        this.listener.bindGlobal('eventG', function (params) {
+            console.log('Handled: event G');
+        });
+    },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+};
+_controller(ControllerA);</code></tab>
+                    <tab><code>//Controller of Pattern "B"
+var ControllerB = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+ControllerB.prototype = {
+    onReady     : function (results) {
+        this.listener.trigger('eventA', null);
+        this.listener.triggerGlobal('eventG', null);
+    },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+};
+_controller(ControllerB);</code></tab>
+                    <tab><code>'Handled: event G';
+//Event A is in pattern "A" scope and can be handled only from pattern "A".</code></tab>
+                </tabs>
+            </tabs>
+            <p>So all handles attached with method <span class="code-inline">bind</span> are isolated (in scope of current pattern) and you can use same names of events in different patterns. But method <span class="code-inline">bindGlobal</span> uses common global namespace, and here you should be care with potential conflicts. </p>
+            <h3>Exchange</h3>
+            <p>Object <span class="code-inline">exchange</span> can be used only in you initialize your pattern via JavaScript call. Let’s see on example:</p>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Controller</button>
+                </buttons>
+                <tabs>
+                    <tab><code>_patterns.get({
+    url         : '/patterns/popup/pattern.html',
+    node        : document.body,
+    hooks       : {
+        id      : id,
+        title   : 'Test dialog window',
+        content : {
+            login   : { type: 'text' },
+            password: { type: 'password' },
+            controls: [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }],
+        }
+    },
+    exchange    : {
+        some_prop_0: 'some_value_0',
+        some_prop_1: 'some_value_1',
+        some_prop_2: 'some_value_2',
+    },
+}).render();</code></tab>
+                    <tab><code>var Controller = function (results) {
+    this.instance   = results.instance;
+    this.listener   = results.listener;
+    this.model      = results.model;
+    this.exchange   = results.exchange;
+};
+Controller.prototype = {
+    onReady     : function (results) {
+        //We have access to properties:
+        console.log(results.exchange.some_prop_0);
+        console.log(results.exchange.some_prop_1);
+        console.log(results.exchange.some_prop_2);
+    },
+    onUpdate    : function (results) { },
+    setInstance : function (results) { },
+};
+_controller(Controller);</code></tab>
+                </tabs>
+            </tabs>
+            <p>So, you can use an object <span class="code-inline">exchange</span> as addition communication channel between nested patterns in both directions: parent – child and child – parent. </p>
+            <h3>Model</h3>
+            <p>About model read <a class="link" href="../page_model.html" target="_self"><span class="fa fa-chain"></span> here</a> please.</p>
+            <!--
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex.Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="pattern.css" />
+</head>
+<body>
+    <div data-style="Popup" data-flex-ui-window-move-container="{{id}}" data-flex-ui-window-resize-position-parent="{{id}}" data-flex-ui-window-focus="{{id}}">
+        <div data-style="Popup.Container" data-flex-ui-window-resize-container="{{id}}" data-flex-ui-window-maximize="{{id}}">
+            <div data-style="Popup.Title" data-flex-ui-window-move-hook="{{id}}">
+                <p data-style="Popup.Title">{{title}}</p>
+                <div data-style="Popup.Title.Switcher" data-state="max" data-flex-window-maximize-hook="{{id}}"></div>
+            </div>
+            <div data-style="Popup.Content">{{content}}</div>
+            <div data-style="Popup.Bottom">
+                <p data-style="Popup.Bottom" id="test_bottom_id">{{bottom}}{{::bottom}}</p>
+                <div data-style="Window.Resize.Coner"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

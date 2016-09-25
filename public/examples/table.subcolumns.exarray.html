@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+</head>
+<body>
+    <a data-style="Button" id="add_row">Add new row</a>
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+            _patterns.debug();
+            var data_source = [];
+            for (var i = 0; i < 10; i += 1) {
+                data_source.push({
+                    column_0: (Math.random() * 1000).toFixed(4),
+                    column_1: (Math.random() * 1000).toFixed(4),
+                    column_2: (Math.random() * 1000).toFixed(4),
+                    column_3: {
+                        title_0: (Math.random() * 1000).toFixed(4),
+                        title_1: (Math.random() * 1000).toFixed(4),
+                        title_2: (Math.random() * 1000).toFixed(4),
+                        title_3: (Math.random() * 1000).toFixed(4),
+                    },
+                });
+            }
+            _patterns.get({
+                url     : '/patterns/table/container/pattern.html',
+                node    : document.body,
+                hooks   : {
+                    titles: {
+                        column_0: 'Column #0',
+                        column_1: 'Column #1',
+                        column_2: 'Column #2',
+                        column_3: 'Column #3',
+                    },
+                    rows: _patterns.get({
+                        url     : '/patterns/table/row_buttons/pattern.html',
+                        hooks   : data_source,
+                    })
+                },
+                map     : {
+                    rows: {
+                        url     : '/patterns/table/row_buttons/pattern.html',
+                        hooks   : {
+                            column_3: {
+                                url : '/patterns/table/sub/pattern.html'
+                            }
+                        }
+                    }
+                },
+                onReady: function (res) {
+                    function add(event, indexes) {
+                        var index = indexes !== void 0 ? indexes[1] : rows.length;
+                        rows.splice(index, 0, {
+                            column_0: (Math.random() * 1000).toFixed(4),
+                            column_1: (Math.random() * 1000).toFixed(4),
+                            column_2: (Math.random() * 1000).toFixed(4),
+                            column_3: {
+                                title_0: (Math.random() * 1000).toFixed(4),
+                                title_1: (Math.random() * 1000).toFixed(4),
+                                title_2: (Math.random() * 1000).toFixed(4),
+                                title_3: (Math.random() * 1000).toFixed(4),
+                            }
+                        });
+                        rows[index].$add.on('click', add);
+                        rows[index].$remove.on('click', remove);
+                    };
+                    function remove(event, indexes) {
+                        rows.splice(indexes[1], 1);
+                    };
+                    var rows = res.model[0]._rows_;
+                    _node('a[id="add_row"]').events().add('click', add);
+                    rows.$add.on('click', add);
+                    rows.$remove.on('click', remove);
+                }
+            }).render();
+        }());
+    </script>
+</body>
+</html>

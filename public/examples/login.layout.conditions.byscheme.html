@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+    <link rel="pattern" name="loginpopup"                   src="/patterns/popup/pattern.html" data-hooks="id, title, content, login, password, type, controls" />
+    <link rel="hook"    name="loginpopup.content"           src="/patterns/login/pattern.html" />
+    <link rel="hook"    name="loginpopup.content.login"     src="/patterns/controls/textinput_con/pattern.html" />
+    <link rel="hook"    name="loginpopup.content.password"  src="/patterns/controls/textinput_con/pattern.html" />
+    <link rel="hook"    name="loginpopup.content.controls"  src="/patterns/buttons/flat/pattern.html" />
+</head>
+<body>
+    <loginpopup style="display:none;">
+        <id>0</id>
+        <title>Test dialog window</title>
+        <content>
+            <login >
+                <type>text</type>
+            </login>
+            <password>
+                <type>password</type>
+            </password>
+            <controls>
+                <id>login_button</id><title>login</title>
+                <id>cancel_button</id><title>cancel</title>
+            </controls>
+        </content>
+    </loginpopup>
+</body>
+</html>

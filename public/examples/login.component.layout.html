@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+</head>
+<body>
+    <pattern data-pattern="/components/login/component.html" data-hooks="id, title, content, login, password, type, controls, not_valid_message, not_valid" style="display:none;">
+        <id>0</id>
+        <title>Test dialog window</title>
+        <content>
+            <login>
+                <type>text</type>
+                <not_valid_message>Sorry, but your login should not be shorter than 2 symbols. Please, try again.</not_valid_message>
+                <not_valid>false</not_valid>
+            </login>
+            <password>
+                <type>password</type>
+                <not_valid_message>Sorry, but your password should not be shorter than 6 symbols. Please, try again.</not_valid_message>
+                <not_valid>false</not_valid>
+            </password>
+            <controls>
+                <id>login_button</id><title>login</title>
+                <id>cancel_button</id><title>cancel</title>
+            </controls>
+        </content>
+    </pattern>
+    <script type="text/javascript">
+        _patterns.debug();
+    </script>
+</body>
+</html>

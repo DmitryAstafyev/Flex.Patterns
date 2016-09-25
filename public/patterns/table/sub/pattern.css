@@ -1,0 +1,10 @@
+﻿ul[data-style="SubListInTable"]{
+    list-style  :none;
+    padding     :0;
+    margin      :0;
+}
+ul[data-style="SubListInTable"] li{
+    display     :inline-block;
+    width       :4rem;
+    font-size   :0.8rem;
+}

@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex.Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="pattern.css" />
+</head>
+<body>
+    <tr>
+        <td {{$column_0}} style="background:{{::background_0}};">{{::column_0}}</td>
+        <td {{$column_1}} style="background:{{::background_1}};">{{::column_1}}</td>
+        <td {{$column_2}} style="background:{{::background_2}};">{{::column_2}}</td>
+        <td {{$column_3}} style="background:{{::background_3}};">{{column_3}}
+            <div data-style="Buttons">
+                <a {{$remove}}>Remove</a>
+                <a {{$add}}>Add new</a>
+            </div>
+        </td>
+    </tr>
+</body>
+</html>

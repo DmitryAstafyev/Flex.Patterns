@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Conditions</h1>
+            <p>In most cases we need more specific situation with template, which should be changed according data (hooks). For example, if we have our textbox is used for password – will be cool show some message to user with information about allowed symbols.</p>
+            <p>Let’s back to our example of authorization dialog and change a bit template of textbox.</p>
+            <tabs>
+                <buttons>
+                    <button>Dialog layout</button>
+                    <button>Popup</button>
+                    <button>UPDATED: Textbox</button>
+                    <button>Button</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;div data-type="Pattern.Login"&gt;
+    &lt;p&gt;Login&lt;/p&gt;
+    {{ login }}
+    &lt;p&gt;Password&lt;/p&gt;
+    {{ password }}
+    &lt;div data-type="Pattern.Controls"&gt;{{ controls }}&lt;/div&gt;
+&lt;/div&gt;</code></tab>
+                    <tab><code>&lt;div data-style="Popup" id="{ {id }}"&gt;
+    &lt;div data-style="Popup.Container"&gt;
+        &lt;div data-style="Popup.Title"&gt;
+            &lt;p data-style="Popup.Title"&gt;{{ title }}&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div data-style="Popup.Content"&gt;{{ content }}&lt;/div&gt;
+        &lt;div data-style="Popup.Bottom"&gt;
+            &lt;p data-style="Popup.Bottom"&gt;{{ bottom }}&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+    &lt;!--Attach JS file with condition-handle--&gt;
+    &lt;script type="text/javascript" src="conditions.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;{{ ::value }}&lt;/p&gt;
+    &lt;div data-type="TextInput.Wrapper"&gt;
+        &lt;div data-type="TextInput.Container"&gt;
+            &lt;input data-type="TextInput" type="{{ type }}" value="{{ ::value }}" name="TestInput" {{ $input }}/&gt;
+        &lt;/div&gt;
+        &lt;!--type=password--&gt;
+        &lt;div data-type="TextInput.Info.Icon"&gt;&lt;/div&gt;
+        &lt;div data-type="TextInput.Info.Popup"&gt;
+            &lt;p&gt;You can use in password only letters, number and _&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;!--type--&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></tab>
+                    <tab><code>&lt;a data-type="Buttons.Flat" id="{{ id }}"&gt;{{ title }}&lt;/a&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>As you can see we added new block of HTML-code. Format of condition is very easy: you define in HTML-comment name and value of condition, and close condition by name of it in HTML-comment. </p>
+            <code>&lt;!--[condition_name]=[condition_value]--&gt;
+&lt;div data-type="TextInput.Info.Icon"&gt;&lt;/div&gt;
+&lt;div data-type="TextInput.Info.Popup"&gt;
+    &lt;p&gt;You can use in password only letters, number and _&lt;/p&gt;
+&lt;/div&gt;
+&lt;!--[condition_name]--&gt;</code>
+            <p>Next step – create a condition handle. Pay your attention, we have attached file “condition.js” to our template. Inside this file we have:</p>
+            <code>_conditions({
+    type: function (data) {
+        return data.type;
+    }
+});</code>
+            <p>Let’s discover this code:</p>
+            <ul>
+                <li>Function <span class="code-inline">_conditions</span> is used to define conditions for template (where JS file was attached)</li>
+                <li>Function <span class="code-inline">_conditions</span> can have only one parameter – object with description of conditions.</li>
+                <li>Name of condition should be same as in HTML of template was defined. As you can see here we see condition “type” and same in HTML. </li>
+                <li>Condition-function (in our case “type”) will get from flex.patterns one parameter – data. Data is an object with values of defined hooks. Our template has only one hook – “type”. So, object data will have only one property “type”. In condition function we just return it and that’s all.</li>
+            </ul>
+            <p>How it works? During rendering, flex-patterns will find in HTML conditions, detect their names and will try to find condition-functions. If function is found, flex-patterns executes it within actual data to get result of it. And last step, flex-patterns will try to find condition for gotten result and will leave part of HTML code, which was defined for gotten value of condition. All not-actual conditions will be just removed from result.</p>
+            <p>So, if condition value will be “password” our template will add into layout addition HTML-code and we will see popup, like you can see by this <a class="link" href="../examples/login.layout.conditions.html" target="_blank"><span class="fa fa-chain"></span> example</a>.</p>
+            <p>Let’s modify other our example, example of table and to template of row a several conditions.</p>
+            <code>&lt;tr&gt;
+    &lt;td&gt;{{::column_0}}&lt;/td&gt;
+    &lt;td&gt;{{::column_1}}&lt;/td&gt;
+    &lt;td&gt;{{::column_2}}&lt;/td&gt;
+    &lt;td&gt;
+        &lt;div&gt;
+            &lt;p&gt;{{::column_3}}&lt;/p&gt;
+            &lt;!--value_sets=0--&gt;
+                &lt;!--sub_value_sets=0--&gt;
+                    &lt;p&gt;This value is less than 111&lt;/p&gt;
+                &lt;!--sub_value_sets--&gt;
+                &lt;!--sub_value_sets=0.5--&gt;
+                    &lt;p&gt;This value is more than 111 and less than 222&lt;/p&gt;
+                &lt;!--sub_value_sets--&gt;
+                &lt;!--sub_value_sets=1--&gt;
+                    &lt;p&gt;This value is more than 222 and less than 333&lt;/p&gt;
+                &lt;!--sub_value_sets--&gt;
+            &lt;!--value_sets--&gt;
+            &lt;!--value_sets=0.5--&gt;
+                &lt;p&gt;This value is more than 333 and less than 666&lt;/p&gt;
+            &lt;!--value_sets--&gt;
+            &lt;!--value_sets=1--&gt;
+                &lt;p&gt;This value is more than 666 and less than 1000&lt;/p&gt;
+            &lt;!--value_sets--&gt;
+        &lt;/div&gt;
+    &lt;/td&gt;
+&lt;/tr&gt;</code>
+            <p>As you can see we’ve created two conditions (<span class="code-inline">value_sers</span>, <span class="code-inline">sub_values_sets</span>) with three possible values for each of them. Let’s create file with conditions. And do not forget to attach it to template.</p>
+            <code>_conditions({
+    value_sets: function (data) {
+        if (data.column_3 &lt;= 333                        ) { return '0';     }
+        if (data.column_3 &gt; 333 && data.column_3 &lt;= 666 ) { return '0.5';   }
+        if (data.column_3 &gt; 666                         ) { return '1';     }
+    },
+    sub_value_sets: function (data) {
+        if (data.column_3 &lt;= 111                        ) { return '0';     }
+        if (data.column_3 &gt; 111 && data.column_3 &lt;= 222 ) { return '0.5';   }
+        if (data.column_3 &gt; 222                         ) { return '1';     }
+    },
+});</code>
+            <p>So, now before render each row, flex.patterns will check two conditions and, according its values, build final HTML. You can see, how it looks by this <a class="link" href="../examples/table.conditions.static.html" target="_blank"><span class="fa fa-chain"></span> link</a>.</p>
+            <p>Pay your attention, values of columns are defined as model-reference (<span class="code-inline">{{ ::name }}</span>). It means, that if value will be changed (via model, like it described <a class="link" href="../page_model.html" target="_blank"><span class="fa fa-chain"></span> here</a>) all depended conditions will be recalculated and pattern will be partly updated too. </p>
+            <p>You can ask: why flex.patterns uses such way (via condition-function) instead popular method, when some syntax is used inside template. For example, like EJS-templates.</p>
+            <code>&lt;ul&gt;
+&lt;% for(var i=0; i&lt;supplies.length; i++) {%&gt;
+   &lt;li&gt;&lt;%= supplies[i] %&gt;&lt;/li&gt;
+&lt;% } %&gt;
+&lt;/ul&gt;</code>
+            <p>We have several answers on such question. </p>
+            <ul>
+                <li>Any not-standard syntax quite hard debug. At least you cannot just put somewhere break-point using standard tools of browser. </li>
+                <li>You cannot simply open your template as standalone page.  </li>
+                <li>Templates with not-standard syntax much harder “move” from project to project, because it depend on template-engine.</li>
+                <li>And last reason – such templates cannot be updated in run-time.</li>
+            </ul>
+            <p>Let’s stay on last point a bit longer. Flex-template can be updated in run-time mode. To see, that does it mean, take a look on next example. We will update our conditions for row.</p>
+            <h2>Hidden model’s reference</h2>
+            <p>Sometimes we can have case, when we need reference to model, but without any link to some node in template. In such cases you can create hidden models, which can be used as triggers for conditions. Let’s see it within example and change textbox for password.</p>
+            <code>&lt;p&gt;{{::value}}&lt;/p&gt;
+&lt;div data-type="TextInput.Wrapper"&gt;
+    &lt;div data-type="TextInput.Container"&gt;
+        &lt;input data-type="TextInput" type="{{type}}" value="{{::value}}" name="TestInput" {{$input}}/&gt;
+    &lt;/div&gt;
+    &lt;!--type=password--&gt;
+    &lt;div data-type="TextInput.Info.Icon"&gt;&lt;/div&gt;
+    &lt;div data-type="TextInput.Info.Popup"&gt;
+        &lt;p&gt;You can use in password only letters, number and _&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;!--type--&gt;
+&lt;/div&gt;
+&lt;!--showinfo=show--&gt;
+&lt;p data-type="TextInput.Error"&gt;{{not_valid_message}}&lt;/p&gt;
+&lt;!--showinfo--&gt;
+</code>
+            <p>As you can see, we added addition paragraph, which should be shown, if user tries to use short login or password. Sure it isn’t real validation, but simple example. </p>
+            <p>In addition, we have to add new condition.</p>
+            <code>_conditions(conditions = {
+    type: function (data) {
+        return data.type;
+    },
+    showinfo: function (data) {
+        return data.not_valid === true ? 'show' : 'null';
+    }
+});</code>
+            <p>Also we assigned condition showinfo with model- reference not_valid. But our template doesn’t have such model-reference. It isn’t a problem, everything what we need – define it during rendering. </p>
+            <tabs>
+                <buttons>
+                    <button>Whole code</button>
+                    <button>Part with hidden model</button>
+                </buttons>
+                <tabs>
+                    <tab><code>_patterns.debug();
+var id = flex.unique();
+_patterns.get({
+    url     : '/patterns/popup/pattern.html',
+    node    : document.body,
+    hooks   : {
+        id      : id,
+        title   : 'Test dialog window',
+        content : _patterns.get({
+            url     : '/patterns/login/pattern.html',
+            hooks   : {
+                login   : _patterns.get({
+                    url     : '/patterns/controls/textinput_hidden_model/pattern.html',
+                    hooks   : {
+                        type                : 'text',
+                        not_valid_message   : 'Sorry, but your login should not be shorter than 2 symbols. Please, try again.',
+                        not_valid           : false
+                    }
+                }),
+                password: _patterns.get({
+                    url     : '/patterns/controls/textinput_hidden_model/pattern.html',
+                    hooks   : {
+                        type                : 'password',
+                        not_valid_message   : 'Sorry, but your password should not be shorter than 6 symbols. Please, try again.',
+                        not_valid           : false
+                    }
+                }),
+                controls: _patterns.get({
+                    url     : '/patterns/buttons/flat/pattern.html',
+                    hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+                }),
+            },
+        })
+    },
+    onReady: function (results) {
+        var instance    = this,
+            model       = results.model;
+        model[0]._content_[0]._controls_[0].$button.on('click', function () {
+            var _model = model[0]._content_[0];
+            if (_model._login_[0].value.length <= 2) {
+                _model._login_[0].not_valid = true;
+                setTimeout(function () {
+                    _model._login_[0].not_valid = false;
+                }, 2000);
+            }
+            if (_model._password_[0].value.length <= 4) {
+                _model._password_[0].not_valid = true;
+                setTimeout(function () {
+                    _model._password_[0].not_valid = false;
+                }, 2000);
+            }
+        });
+    }
+}).render();</code></tab>
+                    <tab><code>var instance    = this,
+    model       = results.model;
+model[0]._content_[0]._controls_[0].$button.on('click', function () {
+    var _model = model[0]._content_[0];
+    if (_model._login_[0].value.length <= 2) {
+        _model._login_[0].not_valid = true;
+        setTimeout(function () {
+            _model._login_[0].not_valid = false;
+        }, 2000);
+    }
+    if (_model._password_[0].value.length <= 4) {
+        _model._password_[0].not_valid = true;
+        setTimeout(function () {
+            _model._password_[0].not_valid = false;
+        }, 2000);
+    }
+});
+</code></tab>
+                </tabs>
+            </tabs>
+            <p>Here you can try by yourself – <a class="link" href="../examples/login.script.hiddenmodel.html" target="_blank"><span class="fa fa-chain"></span> click</a>. Just try to click on login with empty fields.</p>
+            <!--
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

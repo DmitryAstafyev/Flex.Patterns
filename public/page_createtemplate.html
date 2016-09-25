@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS: true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>Creating template</h1>
+            <h2>Storing</h2>
+            <p>Template is a simple HTML page with all basic parts, like DOCUMENT, HEAD and BODY. You can define in template tags LINK to define some CSS and SCRIPT – to define some JS files or controller. All such resource will be attached with your template.</p>
+            <p>So, from organization point of view, you can create basic folder “templates” and storage there your templates with resources.</p>
+            <div class="scheme">
+                <img src="schemes/folders.png" />
+            </div>
+            <h2>Basic definitions</h2>
+            <p>To create template, you should know only several definitions:</p>
+            <ul>
+                <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>
+                <li><b>Model.</b> <span class="code-inline">{{ ::name }}</span>. By this mark you bind some property or attribute of node with model. For example, you can bind innerHTML of some node and get access to it within something like this: model.myLable = ‘new HTML for this label’.</li>
+                <li><b>Dom.</b> <span class="code-inline">{{ $name }}</span>. For all nodes (which was marked within <span class="code-inline">{{ $name }}</span>) flex-patterns will create special wrapper to give you easy access to such functionality like: changing styles; attaching events, checking properties and etc.</li>
+                <li><b>Event.</b> <span class="code-inline">{{ @handle }}</span>. For any node you can define name of handle for any DOM event. Flex.Patterns will make an attempt to find defined handle (by name) in your controller.</li>
+            </ul>
+            <p>The best way to explain something – show example. So, to see how it works, let’s create simple dialog for authorization. We will need several temples (simple HTML files):</p>
+            <ul>
+                <li><b>Popup.</b> Template of popup window;</li>
+                <li><b>Textbox.</b> Template of text area: login and password;</li>
+                <li><b>Button.</b> Template of button: logic and cancel;</li>
+                <li><b>Dialog layout.</b> Template with layout for our authorization window.</li>
+            </ul>
+            <p>Let’s postpone HEAD and other places of HTML and paste only BODY tag to save place and your time.</p>
+            <tabs>
+                <buttons>
+                    <button>Dialog layout</button>
+                    <button>Popup</button>
+                    <button>Textbox</button>
+                    <button>Button</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;div data-type="Pattern.Login"&gt;
+    &lt;p&gt;Login&lt;/p&gt;
+    {{ login }}
+    &lt;p&gt;Password&lt;/p&gt;
+    {{ password }}
+    &lt;div data-type="Pattern.Controls"&gt;{{ controls }}&lt;/div&gt;
+&lt;/div&gt;
+</code></tab>
+                    <tab><code>&lt;div data-style="Popup" id="{ {id }}"&gt;
+    &lt;div data-style="Popup.Container"&gt;
+        &lt;div data-style="Popup.Title"&gt;
+            &lt;p data-style="Popup.Title"&gt;{{ title }}&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div data-style="Popup.Content"&gt;{{ content }}&lt;/div&gt;
+        &lt;div data-style="Popup.Bottom"&gt;
+            &lt;p data-style="Popup.Bottom"&gt;{{ bottom }}&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></tab>
+                    <tab><code>&lt;p&gt;{{ ::value }}&lt;/p&gt;
+&lt;div data-type="TextInput.Wrapper"&gt;
+    &lt;div data-type="TextInput.Container"&gt;
+        &lt;input data-type="TextInput" type="{{ type }}" value="{{ ::value }}" name="TestInput"/&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></tab>
+                    <tab><code>&lt;a data-type="Buttons.Flat" id="{{ id }}"&gt;{{ title }}&lt;/a&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <h2>Attaching template</h2>
+            <p>You can attach template by two ways:</p>
+            <ul>
+                <li>via JavaScript;</li>
+                <li>via HTML</li>
+            </ul>
+            <h2>Attaching via JavaScript</h2>
+            <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
+            <code>var id = flex.unique();
+_patterns.get({
+    url     : '/patterns/popup/pattern.html',
+    node    : document.body,
+    hooks   : {
+        id      : id,
+        title   : 'Test dialog window',
+        content : _patterns.get({
+            url     : '/patterns/patterns/login/pattern.html',
+            hooks   : {
+                login   : _patterns.get({
+                    url     : '/patterns/controls/textinput/pattern.html',
+                    hooks   : {
+                        type: 'text',
+                    }
+                }),
+                password: _patterns.get({
+                    url     : '/patterns/controls/textinput/pattern.html',
+                    hooks   : {
+                        type: 'password',
+                    }
+                }),
+                controls: _patterns.get({
+                    url     : '/patterns/buttons/flat/pattern.html',
+                    hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+                }),
+            }
+        })
+    },
+    onReady: function (results) {
+        var instance    = this,
+            dom         = results.dom,
+            model       = results.model;
+        });
+    },
+}).render();
+</code>
+            <p>Parameters of method get (<span class="code-inline">_patterns.get(parameters)</span>)</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">url</td>
+                    <td>yes</td>
+                    <td class="code-inline">string</td>
+                    <td>URL to HTML file of your template</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">node</td>
+                    <td>no</td>
+                    <td class="code-inline">node || string</td>
+                    <td>If you define this property your template will be mounted into defined node. You can define this property as reference to some node or as selector. For example, you can define it as: document.body (reference to node) or as ‘body’ (selector).</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">replace</td>
+                    <td>no</td>
+                    <td class="code-inline">bool</td>
+                    <td>Works only with property [node]. If it’s in true, your template will be mounted instead defined node.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">before</td>
+                    <td>no</td>
+                    <td class="code-inline">node || string</td>
+                    <td>If you define this property your template will be mounted before defined node. You can define this property as reference to some node or as selector.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">after</td>
+                    <td>no</td>
+                    <td class="code-inline">node || string</td>
+                    <td>If you define this property your template will be mounted after defined node. You can define this property as reference to some node or as selector.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">id</td>
+                    <td>no</td>
+                    <td class="code-inline">string</td>
+                    <td>ID of your template.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">hooks</td>
+                    <td>no</td>
+                    <td class="code-inline">object || array</td>
+                    <td>Collections of hooks.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">conditions</td>
+                    <td>no</td>
+                    <td class="code-inline">object</td>
+                    <td>Collections of conditions.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">controller</td>
+                    <td>no</td>
+                    <td class="code-inline">object</td>
+                    <td>You can define controller during calling template. It can be useful if you want to overwrite controller.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">onReady</td>
+                    <td>no</td>
+                    <td class="code-inline">function</td>
+                    <td>This function will be called if rendering of your template was successful.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">resources</td>
+                    <td>no</td>
+                    <td class="code-inline">any</td>
+                    <td>Property resources is used for exchanging of data between your application and controllers.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">remove_missing_hooks</td>
+                    <td>no</td>
+                    <td class="code-inline">bool</td>
+                    <td>If flex-patterns cannot file hook, mark of hook (<span class="code-inline">{{ name }}</span> will be removed from markup. You can prevent such behavior by setting this property to false.</td>
+                </tr>
+            </table>
+            <p>Method <span class="code-inline">get</span> is initializing pattern, but not render it. This method will return caller instance and you can call method <span class="code-inline">render</span> to render pattern according parameters, which was given to method <span class="code-inline">get</span>: <span class="code-inline">_patterns.get(params).render()</span>. </p>
+            <p>Pay your attention, flex-patterns works asynchrony, because it gets sources of your template (HTML, JS and CSS) within HTTP(s) requests. That’s why method <span class="code-inline">render</span> will not return any results of operation. </p>
+            <p>So, method <span class="code-inline">get</span> can be used to define nested patterns.</p>
+            <p>But we have to say, such call (as in previous example) doesn’t look very nice – there are too many definitions of pattern’s urls. So, you can easy solve such issue by mapping your template. Everything what you need – just create JS file, place it with root-template (it’s “/patterns/popup/pattern.html” in our example) and define content of new file, like next:</p>
+            <p>Do not forget attach map.js file to your root template.</p>
+            <tabs>
+                <buttons>
+                    <button>Mapping: map.js</button>
+                    <button>Updated root pattern</button>
+                    <button>Updated: JavaScript call</button>
+                </buttons>
+                <tabs>
+                    <tab><code>_map({
+    content: {
+        url: '/patterns/login/pattern.html',
+        hooks: {
+            login: {
+                url: '/patterns/controls/textinput/pattern.html'
+            },
+            password: {
+                url: '/patterns/controls/textinput/pattern.html'
+            },
+            controls: {
+                url: '/patterns/buttons/flat/pattern.html'
+            },
+        }
+    }
+});</code></tab>
+                    <tab><code>&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;Flex.Template&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;link rel="stylesheet" type="text/css" href="pattern.css" /&gt;
+    &lt;script type="text/javascript" src="map.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div data-style="Popup" id="{{id}}"&gt;
+        &lt;div data-style="Popup.Container"&gt;
+            &lt;div data-style="Popup.Title"&gt;
+                &lt;p data-style="Popup.Title"&gt;{{title}}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div data-style="Popup.Content"&gt;{{content}}&lt;/div&gt;
+            &lt;div data-style="Popup.Bottom"&gt;
+                &lt;p data-style="Popup.Bottom"&gt;{{bottom}}&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></tab>
+                    <tab><code>_patterns.get({
+    url: '/patterns/popup/pattern.html',
+    node: document.body,
+    hooks: {
+        id      : id,
+        title   : 'Test dialog window',
+        content : {
+            login   : { type: 'text' },
+            password: { type: 'password' },
+            controls: [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }],
+        }
+    },
+    onReady: function (results) {
+        var instance = this;
+    }
+}).render();</code></tab>
+                </tabs>
+            </tabs>
+            <p>Now as you can see our caller of pattern looks much simpler.</p>
+            <p>Method <span class="code-inline">_map</span> (in scope of pattern) allows define paths to nested patterns.</p>
+            <h2>Attaching via HTML</h2>
+            <p>Here is an <a class="link" href="../examples/login.layout.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template within HTML, you should define in your page next HTML fragment:</p>
+            <tabs>
+                <buttons>
+                    <button>Without map.js</button>
+                    <button>With map.js</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;pattern src="/patterns/popup/pattern.html" data-hooks="id, title, content, login, password, type, controls"&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content src="/patterns/patterns/login/pattern.html"&gt;
+        &lt;login src="/patterns/controls/textinput/pattern.html"&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password src="/patterns/controls/textinput/pattern.html"&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls src="/patterns/buttons/flat/pattern.html"&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/pattern&gt;</code></tab>
+                    <tab><code>&lt;pattern src="/patterns/popup/pattern.html" data-hooks="id, title, content, login, password, type, controls"&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content&gt;
+        &lt;login&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password"&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/pattern&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>In attribute <span class="code-inline">data-hooks</span> you have to define names of all hooks, which will be used in template. You can include into such list nested patterns too. But if you have several instances of your template, it isn’t very comfortable to define same things each time. So, you can use tag LINK to define basic parameters of pattern.</p>
+            <code>&lt;link rel="pattern" name="login" src="/patterns/popup/pattern.html" data-hooks="id, title, content, login, password, type, controls" /&gt;</code>
+            <p>Now you can render your template a bit simpler. Pay your attention, now you use tag LOGIN (as defined in attribute NAME of LINK) instead tag PATTERN.</p>
+            <tabs>
+                <buttons>
+                    <button>Without map.js</button>
+                    <button>With map.js</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;login&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content src="/patterns/patterns/login/pattern.html"&gt;
+        &lt;login src="/patterns/controls/textinput/pattern.html"&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password src="/patterns/controls/textinput/pattern.html"&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls src="/patterns/buttons/flat/pattern.html"&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/login&gt;</code></tab>
+                    <tab><code>&lt;login&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content&gt;
+        &lt;login&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password"&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/login&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>If you do not want create addition JS-file with map to go away from definition of urls of nested templates, you can do it within LINK tag also:</p>
+            <code>&lt;link rel="hook" name="login.content" src="patterns/patterns/login/pattern.html"/&gt;
+&lt;link rel="hook" name="login.content.login" src="/patterns/controls/textinput/pattern.html"/&gt;
+&lt;link rel="hook" name="login.content.password" src="/patterns/controls/textinput/pattern.html"/&gt;
+&lt;link rel="hook" name="login.content.controls" src="/patterns/buttons/flat/pattern.html"/&gt;
+</code>
+            <p>In this case you can mount your template without map, like here:</p>
+            <code>&lt;login&gt;
+    &lt;id&gt;0&lt;/id&gt;
+    &lt;title&gt;Test dialog window&lt;/title&gt;
+    &lt;content&gt;
+        &lt;login&gt;
+            &lt;type&gt;text&lt;/type&gt;
+        &lt;/login&gt;
+        &lt;password"&gt;
+            &lt;type&gt;password&lt;/type&gt;
+        &lt;/password&gt;
+        &lt;controls&gt;
+            &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+            &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+        &lt;/controls&gt;
+    &lt;/content&gt;
+&lt;/login&gt;</code>
+            <p>Attributes of tag PATTERN</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">src</td>
+                    <td>yes</td>
+                    <td class="code-inline">string</td>
+                    <td>URL to HTML file of your template</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">onReady</td>
+                    <td>no</td>
+                    <td class="code-inline">string</td>
+                    <td>Name of handle, which will be called after pattern is initialized.</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">id</td>
+                    <td>no</td>
+                    <td class="code-inline">string</td>
+                    <td>ID of your template.</td>
+                </tr>
+            </table>
+            <p>Attributes of tag LINK</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">rel</td>
+                    <td>yes</td>
+                    <td class="code-inline">string</td>
+                    <td>Can be “pattern” or “hook”. If rel = “pattern” – link is definition of parameters of template; if rel = “hook” – link is definition of nested template (mapping).</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">name</td>
+                    <td>yes</td>
+                    <td class="code-inline">string</td>
+                    <td>Case rel = "pattern”: name of tag, which will be used for this pattern in layout. Case rel = “hook”: path (map) to nested pattern. For example, if parent template is “tabs” (which has nested template – “tab”), path to nested template will be name = “tabs.tab”</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">data-hooks</td>
+                    <td>no</td>
+                    <td class="code-inline">string</td>
+                    <td>Used only in cases rel = “pattern” (definition of root-template). It’s list of all used hooks inside template (include nested).</td>
+                </tr>
+            </table>
+            <p>If your template will be in layout during page are loading, in this case you should not call any JavaScript code – flex-patterns automatically find template, build it and mount instead tag PATTERN.</p>
+            <p>But if you will add your template into layout after page was loaded, or if you will define attribute onReady, in this case your template will not be rendered automatically to prevent situation, when callback functions aren’t ready (defined), but flex-pattern is ready to render. So, to render template from HTML with defined callbacks, you should do this (after your callback-functions will be ready):</p>
+            <code>_patterns.layout();</code>
+            <h2>Multiply values</h2>
+            <p>To repeat some template within different data several times you should define value of hook as an array of values. Let’s see how it works on an example of table. We will need two templates.</p>
+            <tabs>
+                <buttons>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code>&lt;table data-type="Demo.Table"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;{{ titles.column_0 }}&lt;/th&gt;
+        &lt;th&gt;{{ titles.column_1 }}&lt;/th&gt;
+        &lt;th&gt;{{ titles.column_2 }}&lt;/th&gt;
+        &lt;th&gt;{{ titles.column_3 }}&lt;/th&gt;
+    &lt;/tr&gt;
+    {{ rows }}
+&lt;/table&gt;
+</code></tab>
+                    <tab><code>&lt;tr&gt;
+    &lt;td&gt;{{ column_0 }}&lt;/td&gt;
+    &lt;td&gt;{{ column_1 }}&lt;/td&gt;
+    &lt;td&gt;{{ column_2 }}&lt;/td&gt;
+    &lt;td&gt;{{ column_3 }}&lt;/td&gt;
+&lt;/tr&gt;
+</code></tab>
+                </tabs>
+            </tabs>
+            <p>Let’s render our table. Here is an example of this template – <a class="link" href="../examples/table.html" target="_blank"><span class="fa fa-chain"></span> link</a>.</p>
+            <code>var data_source = [];
+for (var i = 0; i &lt; 100; i += 1) {
+    data_source.push({
+        column_0: (Math.random() * 1000).toFixed(4),
+        column_1: (Math.random() * 1000).toFixed(4),
+        column_2: (Math.random() * 1000).toFixed(4),
+        column_3: (Math.random() * 1000).toFixed(4),
+    });
+}
+_patterns.get({
+    url: '/patterns/table/container/pattern.html',
+    node: document.body,
+    hooks: {
+        titles: {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows: _patterns.get({
+            url: '/patterns/table/row/pattern.html',
+            hooks: data_source,
+        })
+    }
+}).render();</code>
+            <p> Pay your attention, that we can define name of hook as a chain of properties – titles.column_x. It allows us to use an understandable structure of a hook’s object and group properties by their meaning.</p>
+            <p>Also, you have seen, that in previous example (authorization window) we used multiple values for buttons, but pay your attention, in case of JavaScript attaching to define multiply value of hook we used an array to define several instances of template:</p>
+            <code>controls: _patterns.get({
+    url     : '/patterns/buttons/flat/pattern.html',
+    hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+})</code>
+            <p>But in HTML to do same we have to define hooks just several times:</p>
+            <code>&lt;controls src="/patterns/buttons/flat/pattern.html"&gt;
+    &lt;id&gt;login_button&lt;/id&gt;&lt;title&gt;login&lt;/title&gt;
+    &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
+&lt;/controls&gt;</code>
+            <p>Here you can discover an <a class="link" href="../examples/component.table.static.html" target="_blank"><span class="fa fa-chain"></span> example</a> of table, mounted into layout.</p>
+            <!--
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Obligatory</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline"></td>
+                    <td></td>
+                    <td class="code-inline"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                    <button>Template: row</button>
+                </buttons>
+                <tabs>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                    <tab><code></code></tab>
+                </tabs>
+            </tabs>
+            -->
+        </div>
+    </layout>
+</body>
+</html>

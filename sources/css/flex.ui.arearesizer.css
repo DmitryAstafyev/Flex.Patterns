@@ -1,0 +1,64 @@
+﻿div[data-flex-ui-arearesizer="Container"]{
+    display :block;
+    position:absolute;
+    width   :100%;
+    height  :100%;
+    overflow:hidden;
+}
+/*=======================================================================================*/
+div[data-flex-ui-arearesizer="Area"]{
+    display :block;
+    position:absolute;
+    width   :100%;
+    height  :100%;
+    overflow:hidden;
+}
+/*=======================================================================================*/
+div[data-flex-ui-arearesizer="BorderTop"],
+div[data-flex-ui-arearesizer="BorderLeft"]{
+    position            :absolute;
+    background-image    : url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAEBAMAAABb34NNAAAAGFBMVEWqqqrMzMzd7h7d7h7d7h7d7h7MzMzV1dUdARC1AAAAFElEQVQImWNIYGcoY2BgT2BgKAMACjsBu5HBfmQAAAAASUVORK5CYII=");
+    border-top          : 1px solid rgb(200,200,200);
+    border-left         : 1px solid rgb(200,200,200);
+    border-right        : 1px solid rgb(210,210,210);
+    border-bottom       : 1px solid rgb(210,210,210);
+    box-sizing          :border-box;
+    opacity             :1;
+}
+    div[data-flex-ui-arearesizer="BorderTop"]:hover,
+    div[data-flex-ui-arearesizer="BorderLeft"]:hover{
+        opacity         :1;
+    }
+div[data-flex-ui-arearesizer="BorderTop"]{
+    width               :100%;
+    left                :0;
+    cursor              : n-resize;
+    height              :0.1rem;
+    margin-top          :-0.05rem;
+    -moz-transition     : margin 150ms ease-in-out, height 150ms ease-in-out;
+    -o-transition       : margin 150ms ease-in-out, height 150ms ease-in-out;
+    -webkit-transition  : margin 150ms ease-in-out, height 150ms ease-in-out;
+    transition          : margin 150ms ease-in-out, height 150ms ease-in-out;
+}
+    div[data-flex-ui-arearesizer="BorderTop"]:hover{
+        height      :0.4rem;
+        margin-top  :-0.2rem;
+    }
+div[data-flex-ui-arearesizer="BorderLeft"]{
+    height              :100%;
+    top                 :0;
+    cursor              :e-resize;
+    width               :0.1rem;
+    margin-left         :-0.05rem;
+    -moz-transition     : margin 150ms ease-in-out, width 150ms ease-in-out;
+    -o-transition       : margin 150ms ease-in-out, width 150ms ease-in-out;
+    -webkit-transition  : margin 150ms ease-in-out, width 150ms ease-in-out;
+    transition          : margin 150ms ease-in-out, width 150ms ease-in-out;
+}
+    div[data-flex-ui-arearesizer="BorderLeft"]:hover{
+        width       :0.4rem;
+        margin-left :-0.2rem;
+    }
+/*=======================================================================================*/
+/*=======================================================================================*/
+/*=======================================================================================*/

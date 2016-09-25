@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../patterns/table/container/pattern.css" />
+    <link rel="stylesheet" type="text/css" href="../patterns/table/row_con/pattern.css" />
+    <script type="text/javascript" src="../js/reactjs/react-15.1.0.min.js"></script>
+    <script type="text/javascript" src="../js/reactjs/react-dom-15.1.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+</head>
+<body>
+    <script type="text/babel">
+        window.measuring = {};
+        window.measuring.onLoad = performance.now();
+        var Table = React.createClass ({
+            displayName     : 'Example of table',
+            getInitialState : function () {
+                var data_source = [];
+                for (var i = 0; i < 1000; i += 1) {
+                    data_source.push({
+                        column_0    : (Math.random() * 1000).toFixed(4),
+                        column_1    : (Math.random() * 1000).toFixed(4),
+                        column_2    : (Math.random() * 1000).toFixed(4),
+                        column_3    : (Math.random() * 1000).toFixed(4),
+                    });
+                }
+                return {
+                    rows : data_source
+                }
+            },
+            componentDidMount   : function() {
+                window.console.log('From page load: ' + (performance.now() - window.measuring.onLoad).toFixed(4) + 'ms');
+                setTimeout(function(){
+                    window.console.log('From page load: ' + (performance.now() - window.measuring.onLoad).toFixed(4) + 'ms');
+                }, 10);
+            },
+            componentWillUnmount: function() {
+            },
+            render : function () {
+                var rows = null;
+                rows = this.state.rows.map(function(row, index){
+                    var column_3 = null;
+                    if (row.column_3 <= 111                         ) { column_3 = (<p>This value is less than 111</p>);     }
+                    if (row.column_3 > 111 && row.column_3 <= 222   ) { column_3 = (<p>This value is more than 111 and less than 222</p>);}
+                    if (row.column_3 > 222 && row.column_3 <= 333   ) { column_3 = (<p>This value is more than 222 and less than 333</p>);}
+                    if (row.column_3 > 333 && row.column_3 <= 666   ) { column_3 = (<p>This value is more than 333 and less than 666</p>);}
+                    if (row.column_3 > 666                          ) { column_3 = (<p>This value is more than 666 and less than 1000</p>);}
+                    return (
+                        <tr key={index}>
+                            <td>{row.column_0}</td>
+                            <td>{row.column_1}</td>
+                            <td>{row.column_2}</td>
+                            <td>
+                                <div>
+                                    {row.column_3}
+                                    {column_3}
+                                </div>
+                            </td>
+                        </tr>
+                    );
+                });
+                return (
+                    <table data-type="Demo.Table">
+                        <tr>
+                            <th>Column 1</th>
+                            <th>Column 2</th>
+                            <th>Column 3</th>
+                            <th>Column 4</th>
+                        </tr>
+                        {rows}
+                    </table>
+                );
+            }
+        });
+        Table = React.createFactory(Table);
+        ReactDOM.render(Table(), document.body);
+    </script>
+</body>
+</html>

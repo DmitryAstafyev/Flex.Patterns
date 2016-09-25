@@ -1,0 +1,21 @@
+﻿div.text-block-container{
+    position    : relative;
+    width       : 90%;
+    left        :5%;
+    box-sizing  :border-box;
+    margin      :2rem 0;
+    border      : dotted 1px rgb(0, 148, 255);
+}
+    div.text-block{
+        position: relative;
+        padding : 1rem 1rem;
+    }
+        div.text-block:after{
+            position    : absolute;
+            content     :'';
+            top         :0;
+            left        :-0.5rem;
+            width       :0.5rem;
+            bottom      :0;
+            background  : rgb(0, 148, 255);
+        }
