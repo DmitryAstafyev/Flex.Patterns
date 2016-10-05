@@ -1,11 +1,11 @@
 {
-  "name": "flex-node",
+  "name": "flex-patterns",
   "version": "0.0.0",
-  "description": "FlexNode",
+  "description": "FlexPatterns",
   "main": "server.js",
   "author": {
-    "name": "Dmitry",
-    "email": ""
+    "name": "Dmitry Astafyev",
+    "email": "D.Astafyev@outlook.com"
   },
   "dependencies": {
     "express": "^4.14.0",
