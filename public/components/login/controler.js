@@ -1,9 +1,12 @@
 ﻿var Controller = function () { };
 Controller.prototype = {
-    onReady: function (results) {
-        this.model = results.model;
-        this.listener = results.listener;
-        this.instance = results.instance;
+    onReady : function (results) {
+        this.model      = results.model;
+        this.listener   = results.listener;
+        this.instance   = results.instance;
+    },
+    onChange: function(hook, current, previous){
+        window.console.log(hook);
     },
     content: {
         login: {

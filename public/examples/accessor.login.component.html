@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.debug();
+        var id = 'this_is_id';
+        _patterns.get({
+            url     : '/components/login/component.html',
+            node    : document.body,
+            hooks   : {
+                id      : id,
+                title   : 'Title'
+            },
+            onReady : function (results) {
+                var instance = this,
+                    model = results.model[0];
+                setTimeout(function () {
+                    //model.__title('Updated title');
+                    model.__title(_patterns.get({
+                        url: '/patterns/buttons/flat/pattern.html',
+                        hooks: [{ title: 'title button 0', id: 'title_button_0' }, { title: 'title button 1', id: 'title_button_1' }],
+                    }));
+                    model._content_[0].__controls('Title');
+                }, 2000);
+            }
+        }).render();
+    </script>
+</body>
+</html>

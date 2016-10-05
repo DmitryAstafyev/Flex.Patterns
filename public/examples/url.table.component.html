@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+            _patterns.debug();
+            _patterns.get({
+                url: '/components/table.simple/component.html',
+                node        : document.body,
+                hooks       : {
+                    titles  : {
+                        column_0: 'Column #0',
+                        column_1: 'Column #1',
+                        column_2: 'Column #2',
+                        column_3: 'Column #3',
+                    },
+                    rows: _patterns.url('/examples/json/table.json')
+                },
+            }).render();
+        }());
+    </script>
+</body>
+</html>

@@ -700,6 +700,9 @@
                                                     });
                                                 }
                                             };
+                                            binds[_prop].bind.bind(binds[_prop]);
+                                            binds[_prop].unbind.bind(binds[_prop]);
+                                            binds[_prop].handle.bind(binds[_prop]);
                                         }
                                     });
                                     return binds;
@@ -2128,7 +2131,7 @@
                                         return textNode;
                                     };
                                     function makeAccessor(begin, end, path) {
-                                        return function hookAccessor(content, safely) {
+                                        return function (content, safely) {
                                             function getNodes(begin, end) {
                                                 var i       = 10000,
                                                     nodes   = [],

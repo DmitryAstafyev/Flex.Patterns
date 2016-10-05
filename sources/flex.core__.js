@@ -509,7 +509,7 @@
                         parse           : function (response){
                             var result = {
                                     original: response,
-                                    parsed  : void 0
+                                    parsed  : null
                                 };
                             try {
                                 //Try get JSON object
@@ -1025,10 +1025,10 @@
                                             status = false;
                                             try {
                                                 property.type.forEach(function (type) {
-                                                    if (typeof type === 'function') {
-                                                        status = (object[property.name] instanceof Array === true ? true : status);
-                                                    } else if (type === "node") {
-                                                        object[property.name] !== void 0 && (status = (object[property.name].nodeName ? true : status));
+                                                    if (type === "node") {
+                                                        if (object[property.name]) {
+                                                            status = (object[property.name].nodeName ? true : status);
+                                                        }
                                                     } else if (type === "array") {
                                                         status = (object[property.name] instanceof Array === true ? true : status);
                                                     } else if (window[type] !== void 0 && ['string', 'number', 'bool'].indexOf(type) === -1){
@@ -5090,23 +5090,20 @@
                 }
             },
             overhead        : {
-                globaly : {
+                globaly: {
                     set: overhead.globaly.set,
                     get: overhead.globaly.get,
                     del: overhead.globaly.remove
                 },
-                objecty : {
+                objecty: {
                     set: overhead.objecty.set,
                     get: overhead.objecty.get,
                     del: overhead.objecty.remove
                 },
                 register: {
-                    open    : overhead.register.open,
-                    add     : overhead.register.add,
-                    done    : overhead.register.done,
-                    isIn    : overhead.register.isIn,
-                    isDone  : overhead.register.isDone,
-                    isReady : overhead.register.isReady,
+                    open: overhead.register.open,
+                    add : overhead.register.add,
+                    done: overhead.register.done,
                 }
             },
             ajax            : {
@@ -5241,23 +5238,20 @@
                 }
             },
             overhead        : {
-                globaly : {
+                globaly: {
                     set: privates.overhead.globaly.set,
                     get: privates.overhead.globaly.get,
                     del: privates.overhead.globaly.del
                 },
-                objecty : {
+                objecty: {
                     set: privates.overhead.objecty.set,
                     get: privates.overhead.objecty.get,
                     del: privates.overhead.objecty.del
                 },
                 register: {
-                    open    : privates.overhead.register.open,
-                    add     : privates.overhead.register.add,
-                    done    : privates.overhead.register.done,
-                    isIn    : privates.overhead.register.isIn,
-                    isDone  : privates.overhead.register.isDone,
-                    isReady : privates.overhead.register.isReady,
+                    open: privates.overhead.register.open,
+                    add : privates.overhead.register.add,
+                    done: privates.overhead.register.done,
                 }
             },
             ajax            : {

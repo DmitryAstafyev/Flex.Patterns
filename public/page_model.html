@@ -35,8 +35,108 @@
         <navigation></navigation>
         <div class="page-content">
             <h1>Model, events, DOM</h1>
-            <h2>Model</h2>
+            <h2>Basic</h2>
             <p>Never mind, do you use callbacks or controller as result you always will get reference to model of your pattern - <span class="code-inline">results.model</span>.</p>
+            <p>Let’s see closer on it. We will use template of login popup.</p>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: popup layout</button>
+                    <button>Template: text field</button>
+                    <button>Template: button</button>
+                </buttons>
+                <tabs>
+                    <tab><code>_patterns.get({
+    url     : '/patterns/popup/pattern.html',
+    node    : document.body,
+    hooks   : {
+        id      : flex.unique(),
+        title   : 'Test dialog window',
+        content : _patterns.get({
+            url     : '/patterns/login/pattern.html',
+            hooks   : {
+                login   : _patterns.get({
+                    url     : '/patterns/controls/textinput_hidden_model/pattern.html',
+                    hooks   : {
+                        type                : 'text',
+                        not_valid_message   : 'Sorry, but your login should not be shorter than 2 symbols. Please, try again.',
+                        not_valid           : false
+                    }
+                }),
+                password: _patterns.get({
+                    url     : '/patterns/controls/textinput_hidden_model/pattern.html',
+                    hooks   : {
+                        type                : 'password',
+                        not_valid_message   : 'Sorry, but your password should not be shorter than 6 symbols. Please, try again.',
+                        not_valid           : false
+                    }
+                }),
+                controls: _patterns.get({
+                    url     : '/patterns/buttons/flat/pattern.html',
+                    hooks   : [{ title: 'login', id: 'login_button' }, { title: 'cancel', id: 'cancel_button' }]
+                }),
+            },
+        })
+    },
+    onReady: function (results) {
+        var instance    = this,
+            model       = results.model;
+        model[0]._content_[0]._controls_[0].$button.on('click', function () {
+            var _model = model[0]._content_[0];
+            if (_model._login_[0].value.length <= 2) {
+                _model._login_[0].not_valid = true;
+                setTimeout(function () {
+                    _model._login_[0].not_valid = false;
+                }, 2000);
+            }
+            if (_model._password_[0].value.length <= 4) {
+                _model._password_[0].not_valid = true;
+                setTimeout(function () {
+                    _model._password_[0].not_valid = false;
+                }, 2000);
+            }
+        });
+    }
+}).render();</code></tab>
+                    <tab><code>&lt;div data-type="Pattern.Login"&gt;
+    &lt;p&gt;Login&lt;/p&gt;
+    {{ login }}
+    &lt;p&gt;Password&lt;/p&gt;
+    {{ password }}
+    &lt;div data-type="Pattern.Controls"&gt;{{ controls }}&lt;/div&gt;
+&lt;/div&gt;</code></tab>
+                    <tab><code>&lt;p&gt;{{ ::value }}&lt;/p&gt;
+&lt;div data-type="TextInput.Wrapper"&gt;
+    &lt;div data-type="TextInput.Container"&gt;
+        &lt;input data-type="TextInput" type="{{ type }}" value="{{ ::value }}" name="TestInput" {{ $input }} onblur="{{ @onblur }}"/&gt;
+    &lt;/div&gt;
+    &lt;!--type=password--&gt;
+    &lt;div data-type="TextInput.Info.Icon"&gt;&lt;/div&gt;
+    &lt;div data-type="TextInput.Info.Popup"&gt;
+        &lt;p data-type="TextInput.Info.Popup"&gt;You can use in password only letters, number and _&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;!--type--&gt;
+&lt;/div&gt;
+&lt;!--showinfo=show--&gt;
+&lt;p data-type="TextInput.Error" data-not_valid="{{ ::not_valid }}"&gt;{{ not_valid_message }}&lt;/p&gt;
+&lt;!--showinfo--&gt;</code></tab>
+                    <tab><code>&lt;a data-type="Buttons.Flat" id="{{ id }}" {{ $button }} onclick="{{ @onclick }}"&gt;{{ title }}&lt;/a&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>For this template we will get next model.</p>
+            <div class="scheme">
+                <img src="schemes/model_sheme.png" />
+            </div>
+            <p>In model we can have next properties:</p>
+            <ul>
+                <li>No prefix. This is reference to model (in layout marked as <span class="code-inline">{{ ::name }}</span>) or it’s just value of hook (<span class="code-inline">{{ name }}</span>).</li>
+                <li>"<span class="code-inline">$$$</span>". Listener of all changes in model reference. For example, we have model reference <span class="code-inline">not_valid</span>. So you will have also <span class="code-inline">$$not_valid</span>, and you will get possibility to attach your own listener of changes this model reference (<span class="code-inline">$$not_valid.bind(handle)</span>).</li>
+                <li>"<span class="code-inline">$</span>". This is reference to DOM of marked in layout by <span class="code-inline">{{ $name }}</span> node.</li>
+                <li>"<span class="code-inline">_</span>". This prefix used to show sub-patterns. In our case we have sub-patterns: <span class="code-inline">_login_</span>, <span class="code-inline">_password_</span> and other.</li>
+                <li>"<span class="code-inline">__</span>". This prefix used for hook’s value accessor. For example, we have hook <span class="code-inline">title</span>. So we can change value of this hook via accessor: <span class="code-inline">__title(new_value)</span>.</li>
+            </ul>
+            <p>Let’s go step by step.</p>
+            <h2>Model</h2>
             <tabs>
                 <buttons>
                     <button>Using callback</button>
@@ -171,7 +271,7 @@ _patterns.get({
             <div class="scheme">
                 <img src="schemes/model.png" />
             </div>
-            <p>All nested levels in your pattern has same names as hook has, but with symbol “_” at the begin and at the end - <span class="code-inline">_rows_</span>. All names of properties are same, like it was defined in pattern (HTML-file).</p>            
+            <p>All nested levels in your pattern has same names as hook has, but with symbol "_" at the begin and at the end - <span class="code-inline">_rows_</span>. All names of properties are same, like it was defined in pattern (HTML-file).</p>            
             <h3>Array functionality</h3>
             <p>As you have noticed, all levels of model are arrays. So, you can make modification of your template using all features of array. For example, you can add or remove some values.</p>
             <tabs>
@@ -192,9 +292,32 @@ model[0]._rows_.splice(0, 1);</code></tab>
                 </tabs>
             </tabs>
             <p>All changes will be immediately rendered. Here you can try an <a class="link" href="../examples/table.conditions.static.exarray.html" target="_blank"><span class="fa fa-chain"></span> example</a>.</p>
+            <h3>Model changes</h3>
+            <p>If you have in your pattern model-reference <span class="code-inline">{{ ::name }}</span> you will get next object: <span class="code-inline">$$$name</span>. This object has only two methods.</p>
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Return</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">bind(handle [function])</td>
+                    <td class="code-inline">id [string]</td>
+                    <td>Add handle to define model reference. Will be called each time model reference changes. </td>
+                </tr>
+                <tr>
+                    <td class="code-inline">unbind(id [string])</td>
+                    <td class="code-inline">[bool]</td>
+                    <td>Remove handle by ID</td>
+                </tr>
+            </table>
+
+
+
+
             <h2>DOM manipulations</h2>
             <p>Flex-Patterns allows use direct access to DOM in opposite of many other patterns-engines (let’s say reactJS for example). If developer understands, what he does – why we should deny do it? </p>
-            <p>To define some node as “will be used for DOM manipulations” you should mark such node as <span class="code-inline">{{ $name }}</span> Let’s see with <a class="link" href="../examples/table.conditions.static.exarray.html" target="_blank"><span class="fa fa-chain"></span> example</a> (which was used before).</p>
+            <p>To define some node as "will be used for DOM manipulations" you should mark such node as <span class="code-inline">{{ $name }}</span> Let’s see with <a class="link" href="../examples/table.conditions.static.exarray.html" target="_blank"><span class="fa fa-chain"></span> example</a> (which was used before).</p>
             <tabs>
                 <buttons>
                     <button>Template: table</button>
@@ -358,7 +481,7 @@ model[0]._rows_.splice(0, 1);</code></tab>
             <p>Now you can call your method for any element in DOM-reference.</p>
             <code>model[0]._rows_[0].$cells.setBackground('rgb(0,200,0)');</code>
             <h2>Events</h2>
-            <p>Sure, in case, when you need just attach some event to node, it isn’t nice way define node as DOM-reference and bind handle to node’s event “manually”, like it was in previous example.</p>
+            <p>Sure, in case, when you need just attach some event to node, it isn’t nice way define node as DOM-reference and bind handle to node’s event "manually", like it was in previous example.</p>
             <p>Fortunately, you have much more easy way: define name of handle in pattern (HTML-file).</p>
             <p>Let’s see it on example – popup for authorization process. </p>
             <tabs>
@@ -399,7 +522,7 @@ model[0]._rows_.splice(0, 1);</code></tab>
                     <tab><code>&lt;a data-type="Buttons.Flat" id="{{ id }}" onclick="{{ @onButtonClick }}"&gt;{{ title }}&lt;/a&gt;</code></tab>
                 </tabs>
             </tabs>
-            <p>Pay your attention on pattern of button (last one). You can see where event <span class="code-inline">onclick</span> and name of handle <span class="code-inline">onButtonClick</span> with symbol “@” before (by this symbol event’s handles should be defined).</p>
+            <p>Pay your attention on pattern of button (last one). You can see where event <span class="code-inline">onclick</span> and name of handle <span class="code-inline">onButtonClick</span> with symbol "@" before (by this symbol event’s handles should be defined).</p>
             <p>You can use any standard event (according W3C): <span class="code-inline">onclick</span>, <span class="code-inline">onchange</span>, <span class="code-inline">onfocus</span> and etc. Also, it’s never mind: <span class="code-inline">onclick</span> or <span class="code-inline">onClick</span>.</p>
             <p>To implement handle of event you should define it in controller.</p>
             <tabs>
@@ -470,6 +593,52 @@ Controller.prototype = {
             </tabs>
             <p>As you can see you have two ways: you can define common handle (for both buttons) or define handle for each button separately. For authorization popup both ways are okay. But when we are talking about for example tables, we can use only common handle. </p>
             <p>Detect which button was clicked you can by argument index, which will be always in arguments of handle. </p>
+            <h2>Hook's values accessors</h2>
+            <p>For each hook in your pattern will be created accessor (prefix "<span class="code-inline">__</span>" in model). Accessor is function, which get only two arguments <span class="code-inline">(value, safely)</span></p>
+            <ul>
+                <li><span class="code-inline">value</span> This is obligatory argument. Value can be: <span class="code-inline">string</span> or <span class="code-inline">pattern</span></li>
+                <li><span class="code-inline">safely_flag</span> This is not obligatory argument (default value <span class="code-inline">true</span> In <span class="code-inline">false</span> you can insert tags into hook and some DOM will be build.</li>
+            </ul>
+            <p>Let’s see on examples. In next <a class="link" href="../examples/accessor.login.html" target="_blank"><span class="fa fa-chain"></span> example</a> we will change title of our popup in 1 second after pattern will be rendered.</p>
+            <code>_patterns.get({
+    url     : '/patterns/popup/pattern.html',
+    node    : document.body,
+    hooks   : {
+        id      : id,
+        title   : 'Test dialog window',
+        content : _patterns.get({
+            ...
+        })
+    },
+    onReady: function (results) {
+        var instance    = this,
+            model       = results.model[0];
+        setTimeout(function () {
+            model.__title('Updated title');
+        }, 2000);
+    }
+}).render();</code>
+            <p>In this <a class="link" href="../examples/accessor.login.component.html" target="_blank"><span class="fa fa-chain"></span> example</a> we will place buttons into title area and place text into buttons area.</p>
+            <code>_patterns.get({
+    url     : '/components/login/component.html',
+    node    : document.body,
+    hooks   : {
+        id      : id,
+        title   : 'Title'
+    },
+    onReady : function (results) {
+        var instance = this,
+            model = results.model[0];
+        setTimeout(function () {
+            model.__title(_patterns.get({
+                url     : '/patterns/buttons/flat/pattern.html',
+                hooks   : [{ title: 'title button 0', id: 'title_button_0' }, { title: 'title button 1', id: 'title_button_1' }],
+            }));
+            model._content_[0].__controls('Title');
+        }, 2000);
+    }
+}).render();</code>            
+
             <!--
             <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>
             <li><b>Hook.</b> <span class="code-inline">{{ name }}</span>. Hook is a mark to paste some content at marked place.</li>

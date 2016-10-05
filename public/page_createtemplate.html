@@ -521,6 +521,152 @@ _patterns.get({
     &lt;id&gt;cancel_button&lt;/id&gt;&lt;title&gt;cancel&lt;/title&gt;
 &lt;/controls&gt;</code>
             <p>Here you can discover an <a class="link" href="../examples/component.table.static.html" target="_blank"><span class="fa fa-chain"></span> example</a> of table, mounted into layout.</p>
+            <h2>External data sources</h2>
+            <p>In addition, you can use as hooks values source some URL. Sure, by defined URL should be returned some JSON object. This JSON object will be used as hooks values. Let’s see next <a class="link" href="../examples/url.table.conditions.static.html" target="_blank"><span class="fa fa-chain"></span> example</a>.</p>
+            <code>_patterns.get({
+    url         : '/patterns/table/container/pattern.html',
+    node        : document.body,
+    hooks       : {
+        titles  : {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows    :_patterns.get({
+            url     : '/patterns/table/row_con/pattern.html',
+            hooks   : _patterns.url('/examples/json/table.json'),
+        })
+    },
+}).render();</code>
+            <p>To define external source of data you should use method <span class="code-inline">url</span> of <span class="code-inline">_patterns</span>: <span class="code-inline">_patterns.url(url, parameters)</span>. Let’s see on parameters closer.</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Default</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="code-inline">url</td>
+                    <td></td>
+                    <td class="code-inline">STRING</td>
+                    <td>url, where data can be received</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters</td>
+                    <td></td>
+                    <td class="code-inline">OBJECT</td>
+                    <td>Parameters of data request</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.parser(data)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>You can define your parser which will be applied to received data</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.method</td>
+                    <td>GET</td>
+                    <td class="code-inline">STRING</td>
+                    <td>Method of request: POST or GET</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.parameters</td>
+                    <td>null</td>
+                    <td class="code-inline">STRING || ARRAY</td>
+                    <td>Parameters of your request. In GET case from ARRAY will be converted to STRING automatically</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.callbacks.success(response, request)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>Handled in success</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.callbacks.fail(response, request)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>Handled in fail</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.callbacks.before(request)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>Handled before do request</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.callbacks.reaction(response, request)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>Handled on each reaction of request</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.callbacks.timeout(response, request)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>Handled in timeout case</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.callbacks.headers(response, request)</td>
+                    <td>null</td>
+                    <td class="code-inline">FUNCTION</td>
+                    <td>Handled when HEADERS are gotten</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings</td>
+                    <td></td>
+                    <td class="code-inline">OBJECT</td>
+                    <td>Addition configuration of request</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings.id</td>
+                    <td>some string</td>
+                    <td class="code-inline">STRING</td>
+                    <td>ID of current request</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings.timeout</td>
+                    <td>20000</td>
+                    <td class="code-inline">NUMBER</td>
+                    <td>Timeout in ms</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings.doNotChangeHeaders</td>
+                    <td>false</td>
+                    <td class="code-inline">BOOLEAN</td>
+                    <td>In true headers will not be validate and parsed</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings.doNotChangeParameters</td>
+                    <td>false</td>
+                    <td class="code-inline">BOOLEAN</td>
+                    <td>In true parameters of request (defined as object or array) will not be validate and parsed. For POST requests</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings.doNotEncodeParametersAsURL</td>
+                    <td>false</td>
+                    <td class="code-inline">BOOLEAN</td>
+                    <td>In true parameters of request (defined as string) will not be validate and parsed. For GET requests</td>
+                </tr>
+                <tr>
+                    <td class="code-inline">parameters.settings.headers</td>
+                    <td>null</td>
+                    <td class="code-inline">STRING || ARRAY</td>
+                    <td>Collection of headers</td>
+                </tr>
+            </table>
+            <p>As URL you can define some specific hook (like in previous example) or all hooks, like <a class="link" href="../examples/url.table.component.all.html" target="_blank"><span class="fa fa-chain"></span> here</a>.</p>
+            <code>_patterns.get({
+    url     : '/components/table.simple/component.html',
+    node    : document.body,
+    hooks   : _patterns.url('/examples/json/table.all.json', {
+        parser: function (res) {
+            res.titles.column_0 = 'Column 0 (UPD)';
+            return res;
+        }
+    }),
+}).render();</code>
             <!--
             <table>
                 <tr>
