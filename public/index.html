@@ -191,6 +191,44 @@ _patterns.get({
 </code></tab>
                 </tabs>
             </tabs>
+            <p>Or you can create only one template of table (include template of row) and mark in your basic template repeated element as <span class="code-inline">{{ [rows] }}</span>. Like this:</p>
+            <code>&lt;table data-type="Demo.Table"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;{{ titles.column_0 }}&lt;/th&gt;
+		&lt;th&gt;{{ titles.column_1 }}&lt;/th&gt;
+		&lt;th&gt;{{ titles.column_2 }}&lt;/th&gt;
+		&lt;th&gt;{{ titles.column_3 }}&lt;/th&gt;
+	&lt;/tr&gt;
+	&lt;tr {{ [rows] }}&gt;
+		&lt;td&gt;{{ column_0 }}&lt;/td&gt;
+		&lt;td&gt;{{ column_1 }}&lt;/td&gt;
+		&lt;td&gt;{{ column_2 }}&lt;/td&gt;
+		&lt;td&gt;{{ column_3 }}&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;</code>
+            <p>In this case will be enough to call your pattern with next:</p>
+            <code>var data_source = [];
+for (var i = 0; i < 100; i += 1) {
+    data_source.push({
+        column_0: (Math.random() * 1000).toFixed(4),
+        column_1: (Math.random() * 1000).toFixed(4),
+        column_2: (Math.random() * 1000).toFixed(4),
+        column_3: (Math.random() * 1000).toFixed(4),
+    });
+}
+_patterns.get({
+    url     : '/patterns/table/single/pattern.html',
+    node    : document.body,
+    hooks   : {
+        titles: {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows: data_source
+    }
+}).render();</code>
         </div>
     </layout>
 </body>

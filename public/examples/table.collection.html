@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/expatterns.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        (function () {
+            _patterns.debug();
+            "use strict";
+            var data_source = [];
+            for (var i = 0; i < 100; i += 1) {
+                data_source.push({
+                    column_0: (Math.random() * 1000).toFixed(4),
+                    column_1: (Math.random() * 1000).toFixed(4),
+                    column_2: (Math.random() * 1000).toFixed(4),
+                    column_3: (Math.random() * 1000).toFixed(4),
+                });
+            }
+            _patterns.get({
+                url     : '/patterns/table/single/pattern.html',
+                node    : document.body,
+                hooks   : {
+                    titles: {
+                        column_0: 'Column #0',
+                        column_1: 'Column #1',
+                        column_2: 'Column #2',
+                        column_3: 'Column #3',
+                    },
+                    rows: data_source
+                }
+            }).render();
+        }());
+    </script>
+</body>
+</html>

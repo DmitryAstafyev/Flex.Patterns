@@ -44,15 +44,15 @@
                 <li>Control focus of window.</li>
             </ul>
             <p>Let’s see again on template of our popup.</p>
-            <code>&lt;div data-style="Popup" data-flex-ui-window-move-container="{{id}}" data-flex-ui-window-resize-position-parent="{{id}}" data-flex-ui-window-focus="{{id}}"&gt;
-        &lt;div data-style="Popup.Container" data-flex-ui-window-resize-container="{{id}}" data-flex-ui-window-maximize="{{id}}"&gt;
-            &lt;div data-style="Popup.Title" data-flex-ui-window-move-hook="{{id}}"&gt;
-                &lt;p data-style="Popup.Title"&gt;{{title}}&lt;/p&gt;
-                &lt;div data-style="Popup.Title.Switcher" data-state="max" data-flex-window-maximize-hook="{{id}}"&gt;&lt;/div&gt;
+            <code>&lt;div data-style="Popup" data-flex-ui-window-move-container="{{ id }}" data-flex-ui-window-resize-position-parent="{{ id }}" data-flex-ui-window-focus="{{ id }}"&gt;
+        &lt;div data-style="Popup.Container" data-flex-ui-window-resize-container="{{ id }}" data-flex-ui-window-maximize="{{ id }}"&gt;
+            &lt;div data-style="Popup.Title" data-flex-ui-window-move-hook="{{ id }}"&gt;
+                &lt;p data-style="Popup.Title"&gt;{{ title }}&lt;/p&gt;
+                &lt;div data-style="Popup.Title.Switcher" data-state="max" data-flex-window-maximize-hook="{{ id }}"&gt;&lt;/div&gt;
             &lt;/div&gt;
-            &lt;div data-style="Popup.Content"&gt;{{content}}&lt;/div&gt;
+            &lt;div data-style="Popup.Content"&gt;{{ content }}&lt;/div&gt;
             &lt;div data-style="Popup.Bottom"&gt;
-                &lt;p data-style="Popup.Bottom" id="test_bottom_id"&gt;{{bottom}}{{::bottom}}&lt;/p&gt;
+                &lt;p data-style="Popup.Bottom" id="test_bottom_id"&gt;{{ bottom }}{{ ::bottom }}&lt;/p&gt;
                 &lt;div data-style="Window.Resize.Coner"&gt;&lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
@@ -92,6 +92,7 @@
                     <td>Node, which is used as button to maximize / restore window</td>
                 </tr>
             </table>
+            <p>You should just define some ID as value of these attributes.</p>
             <p>During rendering of template these UIs will be applied automatically. But you can do it and manually  by calling init-functions.</p>
             <code>//Focus controller
 flex.libraries.ui.window.focus.     init();

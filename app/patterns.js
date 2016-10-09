@@ -8578,7 +8578,10 @@
                     INSIDE_TAG              : />(.*?)</gi,
                     EVENT_ATTR              : /[\w]{1,}(\s{1,})?=(\s{1,})?["']\{\{\@[\w\d_\.]*?\}\}["']/gi,
                     EVENT_BORDERS           : /\{\{\@|\}\}/gi,
-                    LINES                   : /\n|\r|\n\r/gi
+                    LINES                   : /\n|\r|\n\r/gi,
+                    COLLECTION_HOOK_TAG     : /<[^>]*?\{\{\[[\w\d_\.]*?\]\}\}/i,    //Should not be global
+                    COLLECTION_HOOK_NAME    : /{\{\[[\w\d_\.]*?\]\}\}/i,            //Should not be global
+                    COLLECTION_BORDERS      : /{\{\[|\]\}\}/gi,
                 },
                 storage         : {
                     VIRTUAL_STORAGE_GROUP   : 'FLEX_UI_PATTERNS_GROUP',
@@ -8592,6 +8595,7 @@
                     HOOKS_STORAGE           : 'FLEX_PATTERNS_HOOKS_STORAGE',
                     MAPS_STORAGE            : 'FLEX_PATTERNS_MAPS_STORAGE',
                     PATTERN_SOURCES         : 'FLEX_PATTERNS_PATTERN_SOURCES',
+                    PATTERN_SOURCES_HTML    : 'FLEX_PATTERNS_PATTERN_SOURCES_HTML',
                     GLOBAL_EVENTS           : 'FLEX_PATTERNS_GLOBAL_EVENTS',
                     PATTERN_CACHE           : 'FLEX_PATTERNS_CACHE_STORAGE'
                 },
@@ -8661,6 +8665,7 @@
                     BAD_FORMAT_OF_STYLE_IN_ATTRIBUTE        : '0006: BAD_FORMAT_OF_STYLE_IN_ATTRIBUTE',
                     ONLY_ONE_MODEL_REF_CAN_BE_IN_STYLE_PROP : '0007: ONLY_ONE_MODEL_REF_CAN_BE_IN_STYLE_PROP',
                     FAIL_TO_LOAD_PATTERN_IN_COMPONENT       : '0008: FAIL_TO_LOAD_PATTERN_IN_COMPONENT',
+                    COLLECTION_HOOK_IS_WRONG                : '0009: COLLECTION_HOOK_IS_WRONG',
                 },
                 pattern     : {
                     CANNOT_FIND_SOURCE_OF_TEMPLATE          : '1000:CANNOT_FIND_SOURCE_OF_TEMPLATE',
@@ -8733,7 +8738,8 @@
                                 ajax.send();
                             }
                         } else {
-                            flex.logs.log(signature() + logs.source.TEMPLATE_WAS_LOADED, flex.logs.types.NOTIFICATION);
+                            process(!privates.html.search(settings.regs.BODY) ? privates.html : (privates.html = '<body>' + privates.html + '</body>'), success, fail);
+                            //flex.logs.log(signature() + logs.source.TEMPLATE_WAS_LOADED, flex.logs.types.NOTIFICATION);
                         }
                         return true;
                     };
@@ -8852,7 +8858,7 @@
                                                 flags   : privates.flags
                                             });
                                         }
-                                        component
+                                        //component
                                         callback(success);
                                     },
                                     function () {
@@ -9176,6 +9182,34 @@
                                 });
                             }
                         },
+                        collections : {
+                            find    : function () {
+                                var fragment    = null,
+                                    hook        = null,
+                                    _hook       = null;
+                                do{
+                                    fragment = privates.html.search(settings.regs.COLLECTION_HOOK_TAG);
+                                    fragment = ~fragment ? helpers.getFirstTagWithContect(privates.html.substring(fragment, privates.html.length)) : fragment;
+                                    if (typeof fragment === 'string') {
+                                        hook            = fragment.match(settings.regs.COLLECTION_HOOK_NAME)[0];
+                                        _hook           = hook.replace(settings.regs.COLLECTION_BORDERS, '');
+                                        privates.html   = privates.html.replace(fragment, settings.regs.HOOK_OPEN_STR + _hook + settings.regs.HOOK_CLOSE_STR);
+                                        fragment        = fragment.replace(hook, '');
+                                        privates.map.collections[_hook] = {
+                                            html    : fragment,
+                                            hook    : _hook,
+                                            parent  : self.url,
+                                            id      : self.url + '[' + _hook + ']'
+                                        };
+                                        //Save data
+                                        Source.storage.html.add(privates.map.collections[_hook].id, fragment);
+                                    } else if (fragment === null) {
+                                        flex.logs.log(signature() + logs.source.COLLECTION_HOOK_IS_WRONG, flex.logs.types.CRITICAL);
+                                        throw logs.source.COLLECTION_HOOK_IS_WRONG;
+                                    }
+                                } while (fragment !== -1);
+                            }
+                        },
                         tags        : {
                             get     : function () {
                                 var result = null;
@@ -9201,30 +9235,23 @@
                             }
                         },
                         hooks       : {
-                            inAttrs: function (){
+                            inAttrs : function (){
                                 var tags = processing.tags.get(),
                                     regs = settings.regs;
                                 tags.forEach(function (tag, index) {
-                                    var attrs = null;
+                                    var hooks = null;
                                     if (helpers.testReg(regs.HOOK, tag.mod)) {
-                                        attrs = tag.mod.match(regs.ATTRS);
-                                        if (attrs instanceof Array) {
-                                            attrs.forEach(function (attr) {
-                                                var hooks = attr.match(regs.HOOK),
-                                                    _attr = attr;
-                                                if (hooks instanceof Array) {
-                                                    hooks.forEach(function (hook) {
-                                                        var _hook = hook.replace(regs.HOOK_BORDERS, '');
-                                                        _attr = _attr.replace(hook, regs.HOOK_OPEN_STR + settings.other.PARENT_MARK_HTML + _hook + regs.HOOK_CLOSE_STR);
-                                                    });
-                                                    tag.mod = tag.mod.replace(attr, _attr);
-                                                }
+                                        hooks = tag.mod.match(regs.HOOK);
+                                        if (hooks instanceof Array) {
+                                            hooks.forEach(function (hook) {
+                                                var _hook   = hook.replace(regs.HOOK_BORDERS, '');
+                                                tag.mod     = tag.mod.replace(hook, regs.HOOK_OPEN_STR + settings.other.PARENT_MARK_HTML + _hook + regs.HOOK_CLOSE_STR);
                                             });
                                         }
                                     }
                                 });
                             },
-                            inNodes: function () {
+                            inNodes : function () {
                                 var regs            = settings.regs,
                                     contents        = privates.html.match(regs.INSIDE_TAG);
                                 if (contents instanceof Array) {
@@ -9243,7 +9270,7 @@
                                     });
                                 }
                             },
-                            find: function () {
+                            find    : function () {
                                 var regs    = settings.regs,
                                     hooks   = privates.html.match(regs.HOOK);
                                 if (hooks instanceof Array) {
@@ -9494,6 +9521,7 @@
                         procced     : function (){
                             processing.prepare();
                             processing.fix();
+                            processing.collections.find();
                             processing.hooks.inAttrs();
                             processing.hooks.inNodes();
                             processing.events.find();
@@ -9533,19 +9561,21 @@
                         return logs.SIGNATURE + ':: pattern (' + self.url + ')';
                     };
                     returning   = {
-                        load    : load,
-                        html    : html.get,
-                        map     : function () { return privates.map;},
-                        flags   : function () { return privates.flags;},
+                        load        : load,
+                        html        : html.get,
+                        map         : function () { return privates.map;                },
+                        flags       : function () { return privates.flags;              },
+                        collections : function () { return privates.map.collections;    },
                     };
                     return {
-                        load    : returning.load,
-                        html    : returning.html,
-                        map     : returning.map,
-                        binding : {
+                        load        : returning.load,
+                        html        : returning.html,
+                        map         : returning.map,
+                        binding     : {
                             model : processing.binding.model
                         },
-                        flags   : returning.flags
+                        flags       : returning.flags,
+                        collections : returning.collections
                     };
                 },
                 instance    : function (parameters) {
@@ -9553,6 +9583,7 @@
                                                                 { name: 'html', type: 'string', value: null },
                                                                 { name: 'css',  type: 'array',  value: null },
                                                                 { name: 'js',   type: 'array',  value: null }]) !== false) {
+                        parameters.html === null && (parameters.html = Source.storage.html.get(parameters.url));
                         return _object({
                             parent          : settings.classes.SOURCE,
                             constr          : function () {
@@ -9569,7 +9600,8 @@
                                     dom         : null,
                                     conditions  : null,
                                     events      : null,
-                                    component   : null
+                                    component   : null,
+                                    collections : {}
                                 },
                                 binding : {
                                     model   : null
@@ -9600,6 +9632,18 @@
                         var storage = flex.overhead.globaly.get(settings.storage.VIRTUAL_STORAGE_GROUP, settings.storage.PATTERN_SOURCES, {});
                         return storage[url] !== void 0 ? storage[url] : null;
                     },
+                    html: {
+                        add: function (url, html) {
+                            var storage = flex.overhead.globaly.get(settings.storage.VIRTUAL_STORAGE_GROUP, settings.storage.PATTERN_SOURCES_HTML, {});
+                            if (storage[url] === void 0) {
+                                storage[url] = html;
+                            }
+                        },
+                        get: function (url) {
+                            var storage = flex.overhead.globaly.get(settings.storage.VIRTUAL_STORAGE_GROUP, settings.storage.PATTERN_SOURCES_HTML, {});
+                            return storage[url] !== void 0 ? storage[url] : null;
+                        },
+                    }
                 },
                 resource    : {
                     add : function (url, callback) {
@@ -11409,8 +11453,8 @@
                                         if (hook_value instanceof settings.classes.CALLER) {
                                             if (privates.patterns.indexOf(hook_value.url) === -1) {
                                                 privates.patterns.push(hook_value.url);
-                                                patterns.inHooks(hook_value.hooks);
                                             }
+                                            patterns.inHooks(hook_value.hooks);
                                         }
                                     });
                                 });
@@ -11624,6 +11668,41 @@
                                 callback();
                             }
                         };
+                        function checkCollections(sources) {
+                            function updateHooks(hooks, collection, parent) {
+                                if (helpers.isArray(hooks)) {
+                                    hooks.forEach(function (hooks) {
+                                        updateHooks(hooks, collection, parent);
+                                    });
+                                } else if (typeof hooks === 'object' && hooks !== null) {
+                                    if (hooks[collection.hook] !== void 0 && hooks[collection.hook] !== null && !(hooks[collection.hook] instanceof settings.classes.CALLER) && collection.parent === parent) {
+                                        hooks[collection.hook] = Caller.instance({
+                                            url     : collection.id,
+                                            hooks   : hooks[collection.hook]
+                                        });
+                                        result = true;
+                                    } else {
+                                        _object(hooks).forEach(function (prop, val) {
+                                            if (prop !== collection.hook) {
+                                                if ((typeof val === 'object' && val !== null) || val instanceof settings.classes.CALLER) {
+                                                    updateHooks(val instanceof settings.classes.CALLER ? val.hooks : val, collection, val instanceof settings.classes.CALLER ? val.url : parent);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            };
+                            var result = false;
+                            sources.forEach(function (source) {
+                                var collections = source.collections();
+                                if (Object.keys(collections).length > 0) {
+                                    _object(collections).forEach(function (prop, collection) {
+                                        updateHooks(privates.hooks, collection, self.url);
+                                    });
+                                }
+                            });
+                            return result;
+                        };
                         function onSuccess(sources) {
                             //Check addition references
                             checkAdditionRefs(function () {
@@ -11644,15 +11723,23 @@
                                     } else {
                                         //Correct callers
                                         correctCallers();
-                                        //This is pattern
-                                        privates.pattern = Pattern.instance({
-                                            id      : privates.id,
-                                            url     : self.url,
-                                            hooks   : privates.hooks,
-                                            caller  : privates.__instance
-                                        }).build(parameters.callback);
-                                        mount();
-                                        return true;
+                                        //Check collections
+                                        if (!checkCollections(sources)) {
+                                            //No collections inside
+                                            //This is pattern
+                                            privates.pattern = Pattern.instance({
+                                                id      : privates.id,
+                                                url     : self.url,
+                                                hooks   : privates.hooks,
+                                                caller  : privates.__instance
+                                            }).build(parameters.callback);
+                                            mount();
+                                            return true;
+                                        } else {
+                                            //Some collections inside
+                                            //Repeat whole procedure
+                                            return render();
+                                        }
                                     }
                                 });
                             });
@@ -12635,11 +12722,11 @@
                 }
             };
             helpers         = {
-                testReg     : function(reg, str){
+                testReg                 : function(reg, str){
                     reg.lastIndex = 0;
                     return reg.test(str);
                 },
-                binds       : {
+                binds                   : {
                     data        : {
                         value: [
                             //Group #1
@@ -12686,15 +12773,15 @@
                         return false;
                     }
                 },
-                isNode      : function (something) {
+                isNode                  : function (something) {
                     if (something !== void 0 && something.nodeName !== void 0 && something.parentNode !== void 0 && something.nodeType !== void 0) {
                         return true;
                     } else {
                         return false;
                     }
                 },
-                isArray     : function (arr) { return arr instanceof Array ? true : arr instanceof ExArray;},
-                getTextNode : function (node, text, index) {
+                isArray                 : function (arr) { return arr instanceof Array ? true : arr instanceof ExArray;},
+                getTextNode             : function (node, text, index) {
                     var target  = null,
                         index   = index !== void 0 ? index : null;
                     if (node.childNodes !== void 0) {
@@ -12713,14 +12800,14 @@
                     }
                     return target;
                 },
-                getPattern  : function (html){
+                getPattern              : function (html){
                     var tag = helpers.getFirstTag(html);
                     if (tag !== null){
                         return helpers.getParentFor(tag);
                     }
                     return null;
                 },
-                getHash     : function (str){
+                getHash                 : function (str){
                     //Source: http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
                     var hash = 0, i, chr, len;
                     if (str.length === 0) return hash;
@@ -12731,7 +12818,7 @@
                     }
                     return hash.toString();
                 },
-                getFirstTag : function (html) {
+                getFirstTag             : function (html) {
                     var tag = html.match(settings.regs.FIRST_TAG);
                     if (tag !== null) {
                         if (tag.length === 1) {
@@ -12740,7 +12827,7 @@
                     }
                     return null;
                 },
-                getParentFor: function (child_tag) {
+                getParentFor            : function (child_tag) {
                     if (typeof child_tag === 'string') {
                         if (settings.compatibility.CHILD_TO_PARENT[child_tag] !== void 0) {
                             return document.createElement(settings.compatibility.CHILD_TO_PARENT[child_tag]);
@@ -12750,6 +12837,55 @@
                     } else {
                         return null;
                     }
+                },
+                getFirstTagWithContect  : function (html) {
+                    function replace(reg) {
+                        var replaced = {
+                            value   : _html.match(reg),
+                            mark    : flex.unique()
+                        };
+                        replaced.value  = replaced.value[0];
+                        _html           = _html.replace(reg, replaced.mark);
+                        cache.replaced.push(replaced);
+                    };
+                    var tag         = html.match(/<\s*\w{1,}/gi),
+                        close       = null,
+                        full        = null,
+                        open        = null,
+                        result      = null,
+                        close_pos   = null,
+                        open_pos    = null,
+                        cache       = {
+                            start   : { mark: null, value: null },
+                            replaced: []
+                        },
+                        _html       = html;
+                    if (tag instanceof Array && tag.length > 0) {
+                        cache.start.mark    = flex.unique();
+                        cache.start.value   = tag[0];
+                        _html               = _html.replace(cache.start.value, cache.start.mark);
+                        tag                 = tag[0].replace(/<\s*/gi, '');
+                        close               = new RegExp('<\\s*\/\\s*' + tag + '\\s*>', 'i');
+                        open                = new RegExp('<\s*' + tag + '.*?>', 'i');
+                        do {
+                            close_pos   = _html.search(close);
+                            open_pos    = _html.search(open);
+                            if (open_pos !== -1 && open_pos < close_pos) {
+                                replace(open);
+                                replace(close);
+                            } else {
+                                result = ~close_pos ?_html.substring(0, close_pos) + _html.match(close)[0] : null;
+                                break;
+                            }
+                        } while (open_pos !== -1 && open_pos < close_pos);
+                        if (result !== null) {
+                            result = result.replace(cache.start.mark, cache.start.value);
+                            cache.replaced.forEach(function (replaced) {
+                                result = result.replace(replaced.mark, replaced.value);
+                            });
+                        }
+                    }
+                    return result;
                 }
             };
             callers         = {

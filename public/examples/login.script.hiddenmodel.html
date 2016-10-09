@@ -3,17 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="../js/expatterns.min.js"></script>
+    <script type="text/javascript" src="../js/expatterns.js"></script>
 </head>
 <body>
     <script type="text/javascript">
         _patterns.debug();
-        var id = flex.unique();
         _patterns.get({
             url     : '/patterns/popup/pattern.html',
             node    : document.body,
             hooks   : {
-                id      : id,
+                id      : flex.unique(),
                 title   : 'Test dialog window',
                 content : _patterns.get({
                     url     : '/patterns/login/pattern.html',
@@ -43,10 +42,7 @@
             },
             onReady: function (results) {
                 var instance    = this,
-                    model = results.model;
-                /*
-                Correct NULL value
-                */
+                    model       = results.model;
                 model[0]._content_[0]._controls_[0].$button.on('click', function () {
                     var _model = model[0]._content_[0];
                     if (_model._login_[0].value.length <= 2) {

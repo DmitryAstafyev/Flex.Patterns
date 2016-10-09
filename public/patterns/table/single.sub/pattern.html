@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex.Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="pattern.css" />
+</head>
+<body>
+    <table data-type="Demo.Table">
+        <tr>
+            <th>{{titles.column_0}}</th>
+            <th>{{titles.column_1}}</th>
+            <th>{{titles.column_2}}</th>
+            <th>{{titles.column_3}}</th>
+        </tr>
+        <tr {{[rows]}}>
+            <td>{{column_0}}</td>
+            <td>{{column_1}}</td>
+            <td>{{column_2}}</td>
+            <td>
+                <ul {{[column_3]}} data-style="SubListInTable">
+                    <li>{{title_0}}</li>
+                    <li>{{title_1}}</li>
+                    <li>{{title_2}}</li>
+                    <li>{{title_3}}</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

@@ -197,7 +197,7 @@
         return data.not_valid === true ? 'show' : 'null';
     }
 });</code>
-            <p>Also we assigned condition showinfo with model- reference not_valid. But our template doesn’t have such model-reference. It isn’t a problem, everything what we need – define it during rendering. </p>
+            <p>Also we assigned condition <span class="code-inline">showinfo</span> with model reference <span class="code-inline">not_valid</span>. But our template doesn’t have such model reference. It isn’t a problem, everything what we need – define it during rendering. </p>
             <tabs>
                 <buttons>
                     <button>Whole code</button>
@@ -278,6 +278,7 @@ model[0]._content_[0]._controls_[0].$button.on('click', function () {
 </code></tab>
                 </tabs>
             </tabs>
+            <p>Now if you change value of model reference <span class="code-inline">not_valid</span> layout of pattern will be updated without redrawing whole pattern.</p>
             <p>Here you can try by yourself – <a class="link" href="../examples/login.script.hiddenmodel.html" target="_blank"><span class="fa fa-chain"></span> click</a>. Just try to click on login with empty fields.</p>
             <!--
             <p>Here is an <a class="link" href="../examples/login.script.dom.html" target="_blank"><span class="fa fa-chain"></span> example</a>. To attach template via JavaScript you should to do this:</p>

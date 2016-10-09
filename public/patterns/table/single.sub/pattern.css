@@ -1,0 +1,49 @@
+﻿table[data-type="Demo.Table"]{
+    position        :relative;
+    border-collapse :collapse;
+    counter-reset   :row;
+}
+table[data-type="Demo.Table"] td, th{
+    position        :relative;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding     :0.5rem 1rem;
+    font-size   :1rem;
+}
+table[data-type="Demo.Table"] tr:nth-child(2n+1){
+    background: rgb(233,246,253);
+}
+table[data-type="Demo.Table"] tr:first-child{
+    position        :relative;
+    background  : rgb(79,133,187); 
+    background  : -moz-linear-gradient(top,  rgba(79,133,187,1) 0%, rgba(79,133,187,1) 100%); 
+    background  : -webkit-linear-gradient(top,  rgba(79,133,187,1) 0%,rgba(79,133,187,1) 100%);
+    background  : linear-gradient(to bottom,  rgba(79,133,187,1) 0%,rgba(79,133,187,1) 100%);
+    filter      : progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f85bb', endColorstr='#4f85bb',GradientType=0 ); 
+    color       : rgb(250,250,250);
+    text-shadow :1px 1px 1px rgba(0,0,0,0.4);
+}
+table[data-type="Demo.Table"] tr:not(:first-child){
+    position        :relative;
+    counter-increment: row;
+}
+table[data-type="Demo.Table"] td:first-child, th:first-child{
+    padding-left        :3rem;
+}
+table[data-type="Demo.Table"] td:first-child:before{
+    display     :block;
+    width       :3rem;
+    left        :0;
+    position    :absolute;
+    padding     :0.1rem 1rem;
+    font-size   :0.8rem;
+    content     :counter(row);
+    text-align  :left;
+    color       :rgb(150,150,150);
+}
+table[data-type="Demo.Table"] tr:not(:first-child):hover{
+    background          : rgb(136,191,232);
+    background          : -moz-linear-gradient(top,  rgba(136,191,232,1) 0%, rgba(112,176,224,1) 100%); 
+    background          : -webkit-linear-gradient(top,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); 
+    background          : linear-gradient(to bottom,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); 
+    filter              : progid:DXImageTransform.Microsoft.gradient( startColorstr='#88bfe8', endColorstr='#70b0e0',GradientType=0 ); 
+}

@@ -42,7 +42,9 @@
             <code>_patterns.setup({
     USE_STORAGE_CSS : false,
     USE_STORAGE_JS  : false,
-    USE_STORAGE_HTML: false
+    USE_STORAGE_HTML: false,
+    USE_LOCALSTORAGE: false,
+    CACHE_PATTERNS  : false,
 });</code>
             <p>Here is a full list of available settings.</p>
             <table>
@@ -85,6 +87,11 @@
                     <td><span class="code-inline">PATTERN_SRC</span></td>
                     <td><span class="code-inline">data-pattern</span></td>
                     <td>Name of attribute, where URL of pattern will be defined (used for layout-way render).</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">HOOKS_SRC</span></td>
+                    <td><span class="code-inline">data-hooks-src</span></td>
+                    <td>Name of attribute, where URL of source hooks will be defined (used for layout-way render).</td>
                 </tr>
                 <tr>
                     <td><span class="code-inline">HOOK_PREFIX</span></td>

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flex - Patterns</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,700,300italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+    <script src="js/expatterns.js" type="text/javascript"></script>
+    <!--BEGIN: Google Code Prettify-->
+    <link rel="stylesheet" type="text/css" href="js/google-code-prettify/atelier-sulphurpool-light.css" />
+    <script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+    <!--END: Google Code Prettify-->
+    <!--BEGIN: Patterns definitions-->
+    <link rel="pattern" name="layout"       src="/html/page/template.html" data-hooks="content" />
+    <link rel="pattern" name="navigation"   src="/html/navigation/template.html" />
+    <link rel="pattern" name="code"         src="/html/code/template.html" data-hooks="content" />
+    <link rel="pattern" name="tabs"         src="/html/tabs/template.html" data-hooks="buttons, tabs, button, tab" />
+    <link rel="hook"    name="tabs.buttons" src="/html/tabs/button.html" />
+    <link rel="hook"    name="tabs.tabs"    src="/html/tabs/tab.html" />
+    <!--END: Patterns definitions-->
+</head>
+<body>
+    <script type="text/javascript">
+        _patterns.setup({
+            onLayoutBuildFinish: function () {
+                prettyPrint();
+                document.body.style.opacity = 1;
+            },
+            CACHE_PATTERNS : true
+        });
+    </script>
+    <layout style="display:none;">
+        <navigation></navigation>
+        <div class="page-content">
+            <h1>ReactJS and Flex.Patterns</h1>
+            <p>Firstly, it’s definitely incorrect to compare Flex.Patterns with ReactJS. But several times users asked us to do it in borders of pattern’s engine.</p>
+            <p>Okay. As a test subject was token “long” table (1 000 rows) with simple conditions. Here you will fine sources for <a class="link" href="../examples/table.conditions.static.measuring.html" target="_blank"><span class="fa fa-chain"></span> Flex.Pattern</a> and for <a class="link" href="../examples/table.conditions.static.reactjs.html" target="_blank"><span class="fa fa-chain"></span> ReactJS</a>.</p>
+            <p>And results:</p>
+            <div class="scheme">
+                <img src="schemes/react.png" />
+            </div>
+            <p>Sure. Different interactions give a little different results. But basically both are close.</p>
+        </div>
+    </layout>
+</body>
+</html>

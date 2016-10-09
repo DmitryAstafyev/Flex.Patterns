@@ -510,6 +510,52 @@ _patterns.get({
     }
 }).render();</code>
             <p> Pay your attention, that we can define name of hook as a chain of properties – titles.column_x. It allows us to use an understandable structure of a hook’s object and group properties by their meaning.</p>
+            <p>But also you have more simple way. You can create only one template of table (with row template included). In this case you have to mark repeated element with next mark: <span class="code-inline">{{ [name_of_propery] }}</span>. Let’s see with example.</p>
+            <tabs>
+                <buttons>
+                    <button>JavaScript call</button>
+                    <button>Template: table</button>
+                </buttons>
+                <tabs>
+                    <tab><code>var data_source = [];
+for (var i = 0; i < 100; i += 1) {
+    data_source.push({
+        column_0: (Math.random() * 1000).toFixed(4),
+        column_1: (Math.random() * 1000).toFixed(4),
+        column_2: (Math.random() * 1000).toFixed(4),
+        column_3: (Math.random() * 1000).toFixed(4),
+    });
+}
+_patterns.get({
+    url     : '/patterns/table/single/pattern.html',
+    node    : document.body,
+    hooks   : {
+        titles: {
+            column_0: 'Column #0',
+            column_1: 'Column #1',
+            column_2: 'Column #2',
+            column_3: 'Column #3',
+        },
+        rows: data_source
+    }
+}).render();</code></tab>
+                    <tab><code>&lt;table data-type="Demo.Table"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;{{ titles.column_0 }}&lt;/th&gt;
+		&lt;th&gt;{{ titles.column_1 }}&lt;/th&gt;
+		&lt;th&gt;{{ titles.column_2 }}&lt;/th&gt;
+		&lt;th&gt;{{ titles.column_3 }}&lt;/th&gt;
+	&lt;/tr&gt;
+	&lt;tr {{ [rows] }}&gt;
+		&lt;td&gt;{{ column_0 }}&lt;/td&gt;
+		&lt;td&gt;{{ column_1 }}&lt;/td&gt;
+		&lt;td&gt;{{ column_2 }}&lt;/td&gt;
+		&lt;td&gt;{{ column_3 }}&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;</code></tab>
+                </tabs>
+            </tabs>
+            <p>Here is <a class="link" href="../examples/table.collection.html" target="_blank"><span class="fa fa-chain"></span> example</a> of such way. Or you can take a look on a simple drop down list <a class="link" href="../examples/select.collection.html" target="_blank"><span class="fa fa-chain"></span> example</a>.</p>
             <p>Also, you have seen, that in previous example (authorization window) we used multiple values for buttons, but pay your attention, in case of JavaScript attaching to define multiply value of hook we used an array to define several instances of template:</p>
             <code>controls: _patterns.get({
     url     : '/patterns/buttons/flat/pattern.html',
