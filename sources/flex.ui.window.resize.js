@@ -210,8 +210,10 @@
                             },
                             10
                         );
+                        return event.flex.stop();
+                    } else {
+                        return true;
                     }
-                    return event.flex.stop();
                 },
                 stop    : function(event) {
                     var instance = flex.overhead.globaly.get(settings.GLOBAL_GROUP, settings.GLOBAL_CURRENT);

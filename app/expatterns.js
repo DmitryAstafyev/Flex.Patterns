@@ -8555,8 +8555,10 @@
                         container.style.top     = instance.posY + 'px';
                         instance.oldX           = event.flex.pageX;
                         instance.oldY           = event.flex.pageY;
+                        return event.flex.stop();
+                    } else {
+                        return true;
                     }
-                    return event.flex.stop();
                 },
                 stop    : function(event) {
                     flex.overhead.globaly.del(settings.GLOBAL_GROUP, settings.GLOBAL_CURRENT);
@@ -8870,8 +8872,10 @@
                             },
                             10
                         );
+                        return event.flex.stop();
+                    } else {
+                        return true;
                     }
-                    return event.flex.stop();
                 },
                 stop    : function(event) {
                     var instance = flex.overhead.globaly.get(settings.GLOBAL_GROUP, settings.GLOBAL_CURRENT);
