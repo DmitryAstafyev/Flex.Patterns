@@ -819,6 +819,7 @@
                                             hooks.forEach(function (hook) {
                                                 var _hook   = hook.replace(regs.HOOK_BORDERS, '');
                                                 tag.mod     = tag.mod.replace(hook, regs.HOOK_OPEN_STR + settings.other.PARENT_MARK_HTML + _hook + regs.HOOK_CLOSE_STR);
+                                                privates.map.hooks.indexOf(_hook) === -1 && (privates.map.hooks.push(_hook));
                                             });
                                         }
                                     }
@@ -837,6 +838,7 @@
                                                     com_open    = '<!--' + settings.other.HOOK_COM_BEGIN + settings.other.PARENT_MARK_HTML + _hook + '-->',
                                                     com_close   = '<!--' + settings.other.HOOK_COM_END + settings.other.PARENT_MARK_HTML + _hook + '-->';
                                                 _content = _content.replace(hook, com_open + regs.HOOK_OPEN_STR + settings.other.PARENT_MARK_HTML + _hook + regs.HOOK_CLOSE_STR + com_close);
+                                                privates.map.hooks.indexOf(_hook) === -1 && (privates.map.hooks.push(_hook));
                                             });
                                             privates.html = privates.html.replace(content, _content);
                                         }
@@ -1171,6 +1173,7 @@
                                 map     : {
                                     model       : null,
                                     dom         : null,
+                                    hooks       : [],
                                     conditions  : null,
                                     events      : null,
                                     component   : null,
@@ -2007,13 +2010,22 @@
                                 regs        = settings.regs,
                                 _cache      = cache.reset().regs,
                                 fragments   = [],
-                                cached      = hash.getCache();
+                                cached      = hash.getCache(),
+                                hooks_map   = null;
                             if (cached === null) {
-                                original = self.source.html(parent);
+                                original    = self.source.html(parent);
+                                hooks_map   = self.source.map().hooks;
                                 if (helpers.isArray(privates.hooks)) {
                                     html.cache.load(parent, conditions);
                                     privates.hooks.forEach(function (_hooks, index) {
                                         var fragment = original;
+                                        //Add missing hooks
+                                        if (hooks_map instanceof Array && Object.keys(_hooks).length !== hooks_map.length) {
+                                            hooks_map.forEach(function (mapped_hook_name) {
+                                                _hooks[mapped_hook_name] === void 0 && (_hooks[mapped_hook_name] = '');
+                                            });
+                                        }
+                                        //Insert hooks
                                         _object(_hooks).forEach(function (name, value) {
                                             var _name   = (!parent ? '' : parent + '.') + name,
                                                 _res    = html.getHTML(parent, name, value, index);
