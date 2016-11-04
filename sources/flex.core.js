@@ -245,7 +245,7 @@
                 urls    : {
                     PARAMS          : /\?.*/gi,
                     EXTENSION       : /(\.[\w\n]*)$/gi,
-                    JS_URL          : /[\w]*:\/\/[\w\n:\/\.]*\.js/gi,
+                    JS_URL          : /[\w]*:\/\/[\w\n:\/\.\-\_\%]*\.js/gi,
                     NOT_URL_SYMBOLS : /[\s\t\n\r]/gi,
                     JS_EXP_IN_URL   : /\.js$/gi,
                     CSS_EXP_IN_URL  : /\.css$/gi
